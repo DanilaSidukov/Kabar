@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="color_black" format="color" />
+    <attr name="color_blue_1" format="color" />
+    <attr name="color_anthracite" format="color" />
+    <attr name="color_white" format="color" />
+    <attr name="color_blue_2" format="color" />
+    <attr name="color_grey_background" format="color" />
+    <attr name="color_grey_text" format="color" />
+    <attr name="color_red" format="color" />
+    <attr name="color_black_2" format="color" />
+    <attr name="color_like" format="color" />
+</resources>

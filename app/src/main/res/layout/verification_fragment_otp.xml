@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/text_otp_verification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/TextAppearance.Login_bold_style_anthracite"
+        android:textSize="32sp"
+        android:text="@string/otp_verification" />
+
+    <TextView
+        android:id="@+id/text_enter_the_otp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/text_otp_verification"
+        app:layout_constraintEnd_toEndOf="@id/text_otp_verification"
+        app:layout_constraintTop_toBottomOf="@id/text_otp_verification"
+        style="@style/TextAppearance.Login_normal_style_anthracite"
+        android:text ="Enter the OTP sent to +67-1234-5678-9" />
+
+    <com.poovam.pinedittextfield.SquarePinField
+        android:id="@+id/edit_text_otp"
+        android:layout_width="304dp"
+        android:layout_height="90dp"
+        app:fieldBgColor="?color_white"
+        app:noOfFields="4"
+        app:layout_constraintStart_toStartOf="@id/text_enter_the_otp"
+        app:layout_constraintEnd_toEndOf="@id/text_enter_the_otp"
+        app:layout_constraintTop_toBottomOf="@id/text_enter_the_otp"
+        android:layout_marginTop="7dp"
+        android:inputType="number"
+        android:textColor="?color_black"
+        tools:text="1234"
+        style="@style/TextAppearance.Login_bold_style_anthracite"
+        android:textSize="30sp"
+        app:fieldColor="?color_grey_text"
+        app:highlightColor="?color_grey_text"
+        app:cornerRadius="6dp" />
+
+    <ImageView
+        android:id="@+id/ic_attention"
+        android:layout_marginTop="80dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="13dp"
+        app:layout_constraintStart_toStartOf="@id/edit_text_otp"
+        app:layout_constraintTop_toTopOf="@id/edit_text_otp"
+        android:src="@drawable/ic_attention"
+        android:visibility="visible"/>
+    
+    <TextView
+        android:id="@+id/text_invalid_otp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/invalid_otp"
+        style="@style/TextAppearance.Login_normal_style_anthracite"
+        android:layout_marginTop="78dp"
+        android:layout_marginStart="1dp"
+        android:textColor="?color_red"
+        android:textSize="14sp"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@id/ic_attention"
+        app:layout_constraintTop_toTopOf="@id/edit_text_otp"/>
+
+
+    <TextView
+        android:id="@+id/text_resend_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/edit_text_otp"
+        app:layout_constraintEnd_toEndOf="@id/edit_text_otp"
+        app:layout_constraintTop_toBottomOf="@id/edit_text_otp"
+        android:layout_marginTop="27dp"
+        style="@style/TextAppearance.Login_normal_style_anthracite"
+        android:text="@string/resend_code_in"
+        app:layout_constraintHorizontal_bias="0.35" />
+
+    <TextView
+        android:id="@+id/text_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/text_resend_code"
+        app:layout_constraintTop_toTopOf="@id/text_resend_code"
+        android:layout_marginStart="3dp"
+        style="@style/TextAppearance.Login_normal_style_anthracite"
+        android:textColor="?color_red"
+        android:text="56s"/>
+
+    <Button
+        android:id="@+id/button_verify"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="40dp"
+        android:fontFamily="@font/poppins_semibold"
+        style="@style/CustomBlueLoginButton"
+        android:text="@string/verify" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

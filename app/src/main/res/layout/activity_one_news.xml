@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/one_news_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_back" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/one_news_tool_bar">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested_scroll_view_news_one"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?color_white"
+                android:descendantFocusability="blocksDescendants"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_view_image_author_news_one"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="24dp"
+                    app:cardCornerRadius="150dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/image_author_one_news"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_pencil_news" />
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/text_author_one_news"
+                    style="@style/TextAppearance.Login_semibold_style_anthracite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:textColor="?color_black_2"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@id/card_view_image_author_news_one"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="BBC News" />
+
+                <TextView
+                    android:id="@+id/date_onew_news"
+                    style="@style/TextAppearance.Login_normal_style_anthracite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toEndOf="@id/card_view_image_author_news_one"
+                    app:layout_constraintTop_toBottomOf="@id/text_author_one_news"
+                    tools:text="14m ago" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_view_image_news_one"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="24dp"
+                    app:cardCornerRadius="6dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/card_view_image_author_news_one">
+
+                    <ImageView
+                        android:id="@+id/image_news_one"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_news" />
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/text_category_news_one"
+                    style="@style/TextAppearance.Login_normal_style_anthracite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="16dp"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/card_view_image_news_one"
+                    tools:text="Sports" />
+
+                <TextView
+                    android:id="@+id/text_title_news_one"
+                    style="@style/TextAppearance.Login_normal_style_anthracite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:textColor="?color_black_2"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toStartOf="@id/text_category_news_one"
+                    app:layout_constraintTop_toBottomOf="@id/text_category_news_one"
+                    tools:text="Ukraine's President Zelensky to BBC: Blood money being paid for Russian oil" />
+
+                <TextView
+                    android:id="@+id/text_description_news_one"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_title_news_one"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:paddingBottom="10dp"
+                    style="@style/TextAppearance.Login_normal_style_anthracite"
+                    android:textSize="16sp"
+                    tools:text="Ukrainian President Volodymyr Zelensky has accused European countries that continue to buy Russian oil of earning their money in other people\'s blood. In an interview with the BBC, President Zelensky singled out Germany and Hungary, accusing them of blocking efforts to embargo energy sales, from which Russia stands to make up to £250bn ($326bn) this year. In an interview with the BBC, President Zelensky singled out Germany and Hungary, accusing them of blocking efforts to embargo energy sales, from which Russia stands to make up to £250bn ($326bn) this year.
+" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        app:cardElevation="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintVertical_bias="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_marginTop="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.Login_normal_style_anthracite"
+                app:layout_constraintStart_toEndOf="@id/animated_like_news_one"
+                app:layout_constraintTop_toTopOf="@id/animated_like_news_one"
+                app:layout_constraintBottom_toBottomOf="@id/animated_like_news_one"
+                android:text="@string/like"
+                android:layout_marginStart="12dp"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/animated_like_news_one"
+                app:lottie_colorFilter="?color_red"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="24dp"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="false"
+                app:lottie_rawRes="@raw/heart" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.Login_normal_style_anthracite"
+                app:layout_constraintEnd_toStartOf="@id/animated_bookmark_news_one"
+                app:layout_constraintTop_toTopOf="@id/animated_bookmark_news_one"
+                app:layout_constraintBottom_toBottomOf="@id/animated_bookmark_news_one"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="12dp"
+                android:text="@string/add_bookmark" />
+
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="24dp"
+                android:id="@+id/animated_bookmark_news_one"
+                app:lottie_colorFilter="?color_blue_1"
+                app:lottie_autoPlay="false"
+                app:lottie_loop="false"
+                app:lottie_rawRes="@raw/bookmark"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_image_popular_topic"
+            android:layout_width="match_parent"
+            android:layout_height="183dp"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="6dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/image_popular_topic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_news" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/text_category_popular_topic"
+            style="@style/TextAppearance.Login_normal_style_anthracite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="@id/card_view_image_popular_topic"
+            app:layout_constraintTop_toBottomOf="@id/card_view_image_popular_topic"
+            tools:text="Europe" />
+
+        <TextView
+            android:id="@+id/text_title_popular_topic"
+            style="@style/TextAppearance.Login_normal_style_anthracite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Russian warship: Moskva sinks in Black Sea"
+            android:textColor="?color_black_2"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/text_category_popular_topic"
+            app:layout_constraintTop_toBottomOf="@id/text_category_popular_topic" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_image_author_popular_topic"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="2dp"
+            app:cardCornerRadius="150dp"
+            app:cardElevation="0dp"
+            app:layout_constraintStart_toStartOf="@id/text_title_popular_topic"
+            app:layout_constraintTop_toBottomOf="@id/text_title_popular_topic">
+
+            <ImageView
+                android:id="@+id/image_author_popular_topic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_pencil_news" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/text_author_popular_topic"
+            style="@style/TextAppearance.Login_semibold_style_anthracite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textSize="13sp"
+            app:layout_constraintStart_toEndOf="@id/card_view_image_author_popular_topic"
+            app:layout_constraintTop_toTopOf="@id/card_view_image_author_popular_topic"
+            tools:text="BBC News" />
+
+        <ImageView
+            android:id="@+id/image_time_popular_topic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/text_author_popular_topic"
+            app:layout_constraintTop_toBottomOf="@id/text_title_popular_topic"
+            android:layout_marginTop="6dp"
+            android:src="@drawable/ic_time"
+            android:layout_marginStart="12dp" />
+
+        <TextView
+            android:id="@+id/date_popular_topic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4h ago"
+            app:layout_constraintStart_toEndOf="@id/image_time_popular_topic"
+            app:layout_constraintTop_toBottomOf="@id/text_title_popular_topic"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="4dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

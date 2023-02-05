@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/text_reset_password"
+        style="@style/TextAppearance.Login_bold_style_anthracite"
+        android:layout_width="162dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:text="@string/reset_password"
+        android:textColor="?color_anthracite"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_new_password"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="24dp"
+        android:hint="@string/new_password"
+        android:textSize="14sp"
+        app:boxStrokeColor="?color_anthracite"
+        app:boxCornerRadiusBottomEnd="6dp"
+        app:boxCornerRadiusTopStart="6dp"
+        app:boxCornerRadiusTopEnd="6dp"
+        app:boxCornerRadiusBottomStart="6dp"
+        app:boxStrokeWidth="1dip"
+        app:hintTextAppearance="@style/TextAppearance.Login_normal_style_anthracite"
+        app:hintTextColor="?color_anthracite"
+        app:layout_constraintStart_toStartOf="@id/text_reset_password"
+        app:layout_constraintTop_toBottomOf="@id/text_reset_password">
+
+        <com.google.android.material.textfield.TextInputEditText
+            style="@style/TextAppearance.Login_normal_style_anthracite"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="14sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/text_confirm_new_password"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="24dp"
+        android:hint="@string/confirm_new_password"
+        android:textSize="14sp"
+        app:boxStrokeColor="?color_anthracite"
+        app:boxStrokeWidth="1dip"
+        app:boxCornerRadiusBottomEnd="6dp"
+        app:boxCornerRadiusTopStart="6dp"
+        app:boxCornerRadiusTopEnd="6dp"
+        app:boxCornerRadiusBottomStart="6dp"
+        app:hintTextAppearance="@style/TextAppearance.Login_normal_style_anthracite"
+        app:hintTextColor="?color_anthracite"
+        app:layout_constraintStart_toStartOf="@id/text_new_password"
+        app:layout_constraintTop_toBottomOf="@id/text_new_password">
+
+        <com.google.android.material.textfield.TextInputEditText
+            style="@style/TextAppearance.Login_normal_style_anthracite"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="14sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/button_submit_reset"
+        style="@style/CustomBlueLoginButton"
+        android:layout_marginBottom="40dp"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="@string/submit"
+        android:textAppearance="@style/TextAppearance.Login_bold_style_anthracite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

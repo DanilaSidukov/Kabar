@@ -1,0 +1,83 @@
+<resources>
+
+<!-- login and sign up activity strings -->
+    <string name="app_name">Kabar</string>
+    <string name="hello_login">Hello</string>
+    <string name="again">Again!</string>
+    <string name="welcome_back_you_ve_been_missed">Welcome back you’ve been missed</string>
+    <string name="username">Username</string>
+    <string name="symbol_start">*</string>
+    <string name="password">Password</string>
+    <string name="remember_me">Remember me</string>
+    <string name="forgot_the_password">Forgot the password ?</string>
+    <string name="login">Login</string>
+    <string name="or_continue_with">or continue with</string>
+    <string name="facebook">Facebook</string>
+    <string name="google">Google</string>
+    <string name="don_t_have_an_account">don’t have an account ? </string>
+    <string name="sign_up">Sign Up</string>
+    <string name="hello_sign_up">Hello!</string>
+    <string name="signup_to_get_started">Signup to get Started</string>
+    <string name="invalid_username">Invalid Username</string>
+    <string name="already_have_an_account">Already have an account ? </string>
+
+<!-- forgot password activity and fragments -->
+    <string name="forgot_password">Forgot Password ?</string>
+    <string name="submit">Submit</string>
+    <string name="don_t_worry_it_happens">Don’t worry! it happens. Please select the email or number associated with your account.</string>
+    <string name="via_email">via Email:</string>
+    <string name="email">example@youremail.com</string>
+    <string name="via_sms">via SMS:</string>
+    <string name="number">+62-8421-4512-2531</string>
+    <string name="don_t_worry_it_happens_address">Don’t worry! it happens. Please enter the address associated with your account.</string>
+    <string name="email_id_mobile_number">Email ID / Mobile number</string>
+
+<!-- verification activity and fragments -->
+    <string name="otp_verification">OTP Verification</string>
+    <string name="resend_code_in">Resend code in</string>
+    <string name="invalid_otp"> Invalid OTP</string>
+    <string name="verify">Verify</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="new_password">New Password <font color="#C30052">*</font></string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="your_account_is_ready_to_use">Your account is ready to use</string>
+    <string name="go_to_homepage">Go to Homepage</string>
+    <string name="confirm_new_password">Confirm new password <font color="#C30052">*</font></string>
+    <string name="next">Next</string>
+
+    <!-- create profile activity and fragments -->
+    <string name="fill_your_profile">Fill your Profile</string>
+    <string name="full_name">Full Name</string>
+    <string name="email_adress">Email Address<font color="#C30052">*</font></string>
+    <string name="phone_number">Phone Number<font color="#C30052">*</font></string>
+
+    <!-- navbar menu -->
+    <string name="home">Home</string>
+    <string name="explore">Explore</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="profile">Profile</string>
+
+<!-- tabs name -->
+    <string name="all">All</string>
+    <string name="business">Business</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="health_and_food">Health and Food</string>
+    <string name="science">Science</string>
+    <string name="sports">Sports</string>
+    <string name="technology">Technology</string>
+
+    <!-- news activity -->
+    <string name="latest">Latest</string>
+    <string name="see_all">See all</string>
+
+    <!-- fragment explore -->
+    <string name="popular_topic">Popular Topic</string>
+
+    <!-- fragment bookmark -->
+    <string name="search">Search</string>
+
+    <!-- activity news one -->
+    <string name="add_bookmark">Add bookmark</string>
+    <string name="like">Like</string>
+
+</resources>

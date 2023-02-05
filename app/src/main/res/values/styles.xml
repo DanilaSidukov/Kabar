@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance" />
+
+
+    <style name="TextAppearance.Login_bold_style_anthracite">
+        <item name="android:textColor">?color_anthracite</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <style name="TextAppearance.Login_normal_style_anthracite">
+        <item name="android:textColor">?color_anthracite</item>
+        <item name="android:textStyle">normal</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <style name="TextAppearance.Login_semibold_style_anthracite">
+        <item name="android:textColor">?color_anthracite</item>
+        <item name="android:textStyle">normal</item>
+        <item name="fontFamily">@font/poppins_semibold</item>
+    </style>
+
+    <style name="TextAppearance.Tab_text_normal_style_black" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">?color_black</item>
+        <item name="android:textStyle">normal</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <style name="TextAppearance.Tab_text_normal_style_anthracite" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">?color_anthracite</item>
+        <item name="android:textStyle">normal</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <style name="LoginActivityMargin">
+        <item name="android:layout_marginLeft">24dp</item>
+        <item name="android:layout_marginRight">24dp</item>
+    </style>
+
+    <style name="CustomBlueLoginButton">
+        <item name="android:drawable">@drawable/custom_blue_login_button</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">55dp</item>
+        <item name="backgroundTint">?attr/color_blue_1</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Login_bold_style_anthracite</item>
+        <item name="android:layout_marginLeft">24dp</item>
+        <item name="android:layout_marginRight">24dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
+    <style name="CustomGreyLoginButton">
+        <item name="android:drawable">@drawable/custom_grey_login_button</item>
+        <item name="android:layout_width">166dp</item>
+        <item name="android:layout_height">53dp</item>
+        <item name="backgroundTint">?attr/color_grey_background</item>
+        <item name="android:textAppearance">@style/TextAppearance.Login_bold_style_anthracite</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:textColor">?attr/color_grey_text</item>
+    </style>
+
+    <style name="MyThemeOverlayToolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Primary">
+        <!-- color used by navigation icon and overflow icon -->
+        <item name="colorOnPrimary">?color_white</item>
+    </style>
+
+</resources>

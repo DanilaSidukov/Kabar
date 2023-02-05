@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/custom_news_toolbar"
+        layout="@layout/custom_news_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/text_latest"
+        style="@style/TextAppearance.Login_semibold_style_anthracite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="26dp"
+        android:text="@string/latest"
+        android:textColor="?color_black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/custom_news_toolbar" />
+
+    <TextView
+        style="@style/TextAppearance.Login_normal_style_anthracite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="24dp"
+        android:text="@string/see_all"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/custom_news_toolbar" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:saveEnabled="false"
+        android:id="@+id/view_pager2_news"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/table_layout_news"
+        app:layout_constraintTop_toBottomOf="@id/table_layout_news"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/table_layout_news"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_latest"
+        app:tabMode="scrollable"
+        app:tabSelectedTextAppearance="@style/TextAppearance.Tab_text_normal_style_black"
+        app:tabIndicatorColor="?color_blue_1"
+        app:tabIndicatorFullWidth="false"
+        app:tabSelectedTextColor="?color_black"
+        app:tabTextAppearance="@style/TextAppearance.Tab_text_normal_style_anthracite"
+        app:tabTextColor="?color_anthracite" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
