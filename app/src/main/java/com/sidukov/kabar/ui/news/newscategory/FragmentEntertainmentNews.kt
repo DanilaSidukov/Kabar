@@ -11,14 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sidukov.kabar.R
 import com.sidukov.kabar.domain.NewsItem
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FragmentEntertainmentNews : BaseViewPagerFragment(R.layout.fragment_entertainment_news) {
 
     private lateinit var recyclerViewEntertainmentNews: RecyclerView
     private var newsAdapter = NewsAdapter(emptyList())
-    private val newsViewModel: NewsViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,16 +33,16 @@ class FragmentEntertainmentNews : BaseViewPagerFragment(R.layout.fragment_entert
         recyclerViewEntertainmentNews.adapter = NewsAdapter(emptyList())
         recyclerViewEntertainmentNews.addItemDecoration(EmptyDividerItemDecoration())
 
-        val entertainmentList = mutableListOf<NewsItem>().apply {
-            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                newsViewModel.newsData.collect { list ->
-                    list.filter {
-                        it.textCategory == "entertainment"
-                    }
-                }
-            }
-        }
-        newsAdapter.updateList(entertainmentList)
+//        val entertainmentList = mutableListOf<NewsItem>().apply {
+//            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+//                newsViewModel.newsData.collect { list ->
+//                    list.filter {
+//                        it.textCategory == "entertainment"
+//                    }
+//                }
+//            }
+//        }
+//        newsAdapter.updateList(entertainmentList)
     }
 
 }

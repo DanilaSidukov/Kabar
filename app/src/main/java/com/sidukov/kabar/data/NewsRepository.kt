@@ -6,8 +6,9 @@ import com.sidukov.kabar.data.remote.api.ApiClient
 import com.sidukov.kabar.domain.NewsItem
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class NewsRepository(
+class NewsRepository @Inject constructor(
     private val apiClient: ApiClient,
 ) {
 
@@ -15,7 +16,6 @@ class NewsRepository(
         const val DATE_PATTERN = "yyyy-dd-MM HH:mm:ss"
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getNews(): List<NewsItem> {
 
         val requestNews = apiClient.getRequest()

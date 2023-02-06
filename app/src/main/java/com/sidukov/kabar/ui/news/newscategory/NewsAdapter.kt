@@ -23,9 +23,11 @@ class NewsAdapter(
             val now = Calendar.getInstance().time
             val difference = Date(now.time - this.time)
 
+            println("DATE = $difference")
+
             return if (difference.date != 0) "${difference.date}d ago"
-            else if (difference.hours != 0) "${difference.hours}h ago"
-            else if (difference.minutes != 0) "${difference.minutes}m ago"
+            else if (difference.date == 0 && difference.hours != 0) "${difference.hours}h ago"
+            else if (difference.hours == 0 && difference.minutes != 0) "${difference.minutes}m ago"
             else "now"
         }
     }
@@ -36,8 +38,9 @@ class NewsAdapter(
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
-        Picasso.get().load(newsList[position].newsImage)
-            .into(holder.newsImage) //?: R.drawable.ic_news
+        if (newsList[position].newsImage != null) Picasso.get().load(newsList[position].newsImage)
+            .into(holder.newsImage)
+        else holder.newsImage.setImageResource(R.drawable.ic_news)
         holder.category.text = newsList[position].textCategory
         holder.title.text = newsList[position].titleText
         holder.authorImage.setImageResource(newsList[position].authorImage
@@ -50,7 +53,6 @@ class NewsAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateList(list: List<NewsItem>) {
-        newsList = list
         newsList = list
         notifyDataSetChanged()
     }

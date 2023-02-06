@@ -14,20 +14,21 @@ import okhttp3.*
 import java.io.IOException
 import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class ApiClient(val context: Context) {
+class ApiClient @Inject constructor(val context: Context) {
 
     private val client: OkHttpClient = OkHttpClient.Builder()
         .cache(Cache(
             context.cacheDir,
             10L * 1024L * 1024L
         ))
-        .connectTimeout(5, TimeUnit.SECONDS)
-        .readTimeout(5, TimeUnit.SECONDS)
-        .writeTimeout(5, TimeUnit.SECONDS)
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(10, TimeUnit.SECONDS)
+        .writeTimeout(10, TimeUnit.SECONDS)
         .build()
 
     suspend fun getRequest() = suspendCoroutine<NewsBody> { continuation ->

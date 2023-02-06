@@ -7,18 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sidukov.kabar.R
+import com.sidukov.kabar.data.NewsRepository
+import com.sidukov.kabar.data.remote.api.ApiClient
 import com.sidukov.kabar.domain.NewsItem
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
-
+import kotlinx.coroutines.flow.collect
 class FragmentSportsNews: BaseViewPagerFragment(R.layout.fragment_sports_news) {
 
     private lateinit var recyclerViewSportsNews: RecyclerView
     private var newsAdapter = NewsAdapter(emptyList())
-    private val newsViewModel: NewsViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,19 +34,21 @@ class FragmentSportsNews: BaseViewPagerFragment(R.layout.fragment_sports_news) {
 
         recyclerViewSportsNews = view.findViewById(R.id.recycler_view_news_sports)
         recyclerViewSportsNews.adapter = NewsAdapter(emptyList())
+        recyclerViewSportsNews.layoutManager = LinearLayoutManager(requireContext())
         recyclerViewSportsNews.addItemDecoration(EmptyDividerItemDecoration())
 
-        val sportsList = mutableListOf<NewsItem>().apply {
-            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                newsViewModel.newsData.collect{ list ->
-                    list.filter {
-                        it.textCategory == "sports"
-                    }
-                }
-            }
-        }
-        newsAdapter.updateList(sportsList)
-
+//        val sportsList = mutableListOf<NewsItem>().apply {
+//            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+//                newsViewModel.newsData.collect{ list ->
+//                    list.filter {
+//                        it.textCategory == "sports"
+//                    }
+//                    println("inside coroutine - $list")
+//                }
+//            }
+//        }
+//        println("outside sport - $sportsList")
+//        newsAdapter.updateList(sportsList)
     }
 
 }

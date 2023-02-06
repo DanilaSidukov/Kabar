@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sidukov.kabar.R
-import com.sidukov.kabar.ui.news.newscategory.NewsViewModel
 
 class ActivityGeneral: AppCompatActivity() {
 

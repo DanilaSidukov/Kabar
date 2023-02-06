@@ -2,10 +2,17 @@ package com.sidukov.kabar.di
 
 import com.sidukov.kabar.data.NewsRepository
 import com.sidukov.kabar.data.remote.api.ApiClient
-import org.koin.dsl.module
+import dagger.Module
+import dagger.Provides
+import javax.inject.Singleton
 
-val provideNewsRepositoryModule = module {
-    factory {
-        NewsRepository(apiClient = ApiClient(context = get()))
-    }
+@Module
+class RepositoryModule {
+
+    @Singleton
+    @Provides
+    fun provideNewsRepository(
+        apiClient: ApiClient,
+    ): NewsRepository = NewsRepository(apiClient)
+
 }

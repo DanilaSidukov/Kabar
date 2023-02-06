@@ -11,14 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sidukov.kabar.R
 import com.sidukov.kabar.domain.NewsItem
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FragmentHealthAndFoodNews: BaseViewPagerFragment(R.layout.fagment_health_news) {
 
     private lateinit var recyclerViewHealthNews: RecyclerView
     private var newsAdapter = NewsAdapter(emptyList())
-    private val newsViewModel: NewsViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,17 +33,17 @@ class FragmentHealthAndFoodNews: BaseViewPagerFragment(R.layout.fagment_health_n
         recyclerViewHealthNews.adapter = NewsAdapter(emptyList())
         recyclerViewHealthNews.addItemDecoration(EmptyDividerItemDecoration())
 
-        val healthAndFoodList = mutableListOf<NewsItem>().apply {
-            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                newsViewModel.newsData.collect{ list ->
-                    list.filter {
-                        it.textCategory == "health" || it.textCategory == "food"
-                    }
-                }
-            }
-        }
-
-        newsAdapter.updateList(healthAndFoodList)
+//        val healthAndFoodList = mutableListOf<NewsItem>().apply {
+//            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+//                newsViewModel.newsData.collect{ list ->
+//                    list.filter {
+//                        it.textCategory == "health" || it.textCategory == "food"
+//                    }
+//                }
+//            }
+//        }
+//
+//        newsAdapter.updateList(healthAndFoodList)
 
     }
 
