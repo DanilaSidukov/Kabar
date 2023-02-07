@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    app:cardElevation="0dp"
     android:layout_height="122dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,8 +71,9 @@
 
         <TextView
             android:id="@+id/text_author"
-            android:layout_width="145dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:maxLines="2"
             app:layout_constraintStart_toEndOf="@id/card_view_image_author"
             app:layout_constraintTop_toTopOf="@id/card_view_image_author"
             style="@style/TextAppearance.Login_semibold_style_anthracite"

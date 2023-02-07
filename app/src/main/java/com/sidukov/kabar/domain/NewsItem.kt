@@ -1,5 +1,6 @@
 package com.sidukov.kabar.domain
 
+import java.io.Serializable
 import java.util.*
 
 data class NewsItem(
@@ -10,4 +11,4 @@ data class NewsItem(
     val authorImage: Int?,
     val author: String?,
     val date: Date?,
-)
+) : Serializable

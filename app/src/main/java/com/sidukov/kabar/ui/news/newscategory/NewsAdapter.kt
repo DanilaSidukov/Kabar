@@ -14,6 +14,7 @@ import java.util.*
 
 class NewsAdapter(
     private var newsList: List<NewsItem>,
+    private val listener: OnItemNewsClicked,
 ) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
     companion object {
@@ -38,6 +39,11 @@ class NewsAdapter(
     }
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
+
+        holder.itemView.setOnClickListener {
+            listener.onItemNewsClicked(newsList[position])
+        }
+
         if (newsList[position].newsImage != null) Picasso.get().load(newsList[position].newsImage)
             .into(holder.newsImage)
         else holder.newsImage.setImageResource(R.drawable.ic_news)
@@ -66,4 +72,8 @@ class NewsAdapter(
         val date: TextView = itemView.findViewById(R.id.text_date)
     }
 
+}
+
+interface OnItemNewsClicked {
+    fun onItemNewsClicked(itemNews: NewsItem)
 }

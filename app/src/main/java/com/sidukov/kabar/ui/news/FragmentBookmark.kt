@@ -8,11 +8,13 @@ import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sidukov.kabar.R
+import com.sidukov.kabar.domain.NewsItem
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
 import com.sidukov.kabar.ui.news.newscategory.EmptyDividerItemDecoration
 import com.sidukov.kabar.ui.news.newscategory.NewsAdapter
+import com.sidukov.kabar.ui.news.newscategory.OnItemNewsClicked
 
-class FragmentBookmark: BaseViewPagerFragment(R.layout.fragment_bookmark) {
+class FragmentBookmark: BaseViewPagerFragment(R.layout.fragment_bookmark), OnItemNewsClicked {
 
     private lateinit var bookmarkRecyclerView: RecyclerView
     private lateinit var buttonSettings: ImageButton
@@ -29,13 +31,17 @@ class FragmentBookmark: BaseViewPagerFragment(R.layout.fragment_bookmark) {
         super.onViewCreated(view, savedInstanceState)
 
         bookmarkRecyclerView = view.findViewById(R.id.recycler_view_news_bookmark)
-        bookmarkRecyclerView.adapter = NewsAdapter(emptyList())
+        bookmarkRecyclerView.adapter = NewsAdapter(emptyList(), this)
         bookmarkRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         bookmarkRecyclerView.addItemDecoration(EmptyDividerItemDecoration())
 
         buttonSettings = view.findViewById(R.id.button_settings)
         buttonSettings.setOnClickListener {  }
 
+    }
+
+    override fun onItemNewsClicked(itemNews: NewsItem) {
+        TODO("Not yet implemented")
     }
 
 }

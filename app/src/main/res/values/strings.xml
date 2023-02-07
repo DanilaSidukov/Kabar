@@ -65,6 +65,7 @@
     <string name="science">Science</string>
     <string name="sports">Sports</string>
     <string name="technology">Technology</string>
+    <string name="politics">Politics</string>
 
     <!-- news activity -->
     <string name="latest">Latest</string>

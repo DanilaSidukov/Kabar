@@ -12,7 +12,7 @@ class ViewPagerNewsAdapter(
 ): FragmentStateAdapter(container), FragmentReplacer {
 
     companion object {
-        private const val PAGE_COUNTER = 7
+        private const val PAGE_COUNTER = 8
     }
 
     private val mapOfFragment = ArrayMap<Int, BaseViewPagerFragment>()
@@ -52,6 +52,7 @@ class ViewPagerNewsAdapter(
             4 -> FragmentScienceNews()
             5 -> FragmentSportsNews()
             6 -> FragmentTechnologyNews()
+            7 -> FragmentPoliticsNews()
             else -> throw  IllegalStateException()
         }
         replace(position, fragment, isNotify)

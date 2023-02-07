@@ -12,13 +12,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sidukov.kabar.R
 import com.sidukov.kabar.data.NewsRepository
 import com.sidukov.kabar.data.remote.api.ApiClient
+import com.sidukov.kabar.data.settings.Settings
 import com.sidukov.kabar.domain.NewsItem
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
 import kotlinx.coroutines.flow.collect
-class FragmentSportsNews: BaseViewPagerFragment(R.layout.fragment_sports_news) {
+class FragmentSportsNews: BaseViewPagerFragment(R.layout.fragment_sports_news), OnItemNewsClicked {
 
     private lateinit var recyclerViewSportsNews: RecyclerView
-    private var newsAdapter = NewsAdapter(emptyList())
+    private var newsAdapter = NewsAdapter(emptyList(), this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,23 +33,20 @@ class FragmentSportsNews: BaseViewPagerFragment(R.layout.fragment_sports_news) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
+        val sportsList = Settings.newsAllList.filter { list ->
+            list.textCategory == "sports"
+        }
         recyclerViewSportsNews = view.findViewById(R.id.recycler_view_news_sports)
-        recyclerViewSportsNews.adapter = NewsAdapter(emptyList())
+        recyclerViewSportsNews.adapter = NewsAdapter(sportsList, this)
         recyclerViewSportsNews.layoutManager = LinearLayoutManager(requireContext())
         recyclerViewSportsNews.addItemDecoration(EmptyDividerItemDecoration())
+        newsAdapter.updateList(sportsList)
+    }
 
-//        val sportsList = mutableListOf<NewsItem>().apply {
-//            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-//                newsViewModel.newsData.collect{ list ->
-//                    list.filter {
-//                        it.textCategory == "sports"
-//                    }
-//                    println("inside coroutine - $list")
-//                }
-//            }
-//        }
-//        println("outside sport - $sportsList")
-//        newsAdapter.updateList(sportsList)
+    override fun onItemNewsClicked(itemNews: NewsItem) {
+
     }
 
 }

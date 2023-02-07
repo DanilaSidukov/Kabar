@@ -68,7 +68,7 @@
                     tools:text="BBC News" />
 
                 <TextView
-                    android:id="@+id/date_onew_news"
+                    android:id="@+id/date_one_news"
                     style="@style/TextAppearance.Login_normal_style_anthracite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
-                    android:paddingBottom="10dp"
+                    android:paddingBottom="60dp"
                     style="@style/TextAppearance.Login_normal_style_anthracite"
                     android:textSize="16sp"
                     tools:text="Ukrainian President Volodymyr Zelensky has accused European countries that continue to buy Russian oil of earning their money in other people\'s blood. In an interview with the BBC, President Zelensky singled out Germany and Hungary, accusing them of blocking efforts to embargo energy sales, from which Russia stands to make up to £250bn ($326bn) this year. In an interview with the BBC, President Zelensky singled out Germany and Hungary, accusing them of blocking efforts to embargo energy sales, from which Russia stands to make up to £250bn ($326bn) this year.
@@ -144,6 +144,7 @@
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_bottom_bar_reaction"
         app:cardElevation="10dp"
         android:layout_width="match_parent"
         android:layout_height="60dp"

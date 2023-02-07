@@ -29,6 +29,11 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <activity android:name=".ui.news.newscategory.ActivityArticleNews">
+
+
+        </activity>
     </application>
 
 </manifest>

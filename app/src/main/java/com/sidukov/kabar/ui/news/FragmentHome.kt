@@ -45,6 +45,7 @@ class FragmentHome : BaseViewPagerFragment(R.layout.fragment_news) {
                 4 -> getString(R.string.science)
                 5 -> getString(R.string.sports)
                 6 -> getString(R.string.technology)
+                7 -> getString(R.string.politics)
                 else -> "Error"
             }
         }.attach()

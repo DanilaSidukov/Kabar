@@ -1,5 +1,6 @@
 package com.sidukov.kabar.ui.news.newscategory
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +11,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sidukov.kabar.R
 import com.sidukov.kabar.di.injectViewModel
+import com.sidukov.kabar.domain.NewsItem
 import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
+import java.io.Serializable
 import javax.inject.Inject
 
-class FragmentAllNews : BaseViewPagerFragment(R.layout.fragment_all_news) {
+class FragmentAllNews : BaseViewPagerFragment(R.layout.fragment_all_news), OnItemNewsClicked {
 
     private lateinit var recyclerViewAllNews: RecyclerView
-    private var newsAdapter = NewsAdapter(emptyList())
+    private var newsAdapter = NewsAdapter(emptyList(), this)
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var newsViewModel: NewsViewModel
@@ -45,6 +48,16 @@ class FragmentAllNews : BaseViewPagerFragment(R.layout.fragment_all_news) {
                 println("all news = $it")
                 newsAdapter.updateList(it)
             }
+        }
+    }
+
+    override fun onItemNewsClicked(itemNews: NewsItem) {
+        parentFragment?.activity?.let { generalActivity ->
+            startActivity(
+                Intent(generalActivity, ActivityArticleNews::class.java).also {
+                    it.putExtra("item_news", itemNews as Serializable)
+                }
+            )
         }
     }
 

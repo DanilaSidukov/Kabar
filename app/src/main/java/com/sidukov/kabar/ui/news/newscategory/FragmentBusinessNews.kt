@@ -6,16 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sidukov.kabar.R
 import com.sidukov.kabar.data.settings.Settings
 import com.sidukov.kabar.domain.NewsItem
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
 
-class FragmentBusinessNews : BaseViewPagerFragment(R.layout.fragment_business_news) {
+class FragmentBusinessNews : BaseViewPagerFragment(R.layout.fragment_business_news), OnItemNewsClicked {
 
     private lateinit var recyclerViewBusinessNews: RecyclerView
-    private var newsAdapter = NewsAdapter(emptyList())
+    private var newsAdapter = NewsAdapter(emptyList(), this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,21 +26,21 @@ class FragmentBusinessNews : BaseViewPagerFragment(R.layout.fragment_business_ne
         return inflater.inflate(R.layout.fragment_business_news, container, false)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerViewBusinessNews = view.findViewById(R.id.recycler_view_news_business)
-        recyclerViewBusinessNews.adapter = NewsAdapter(emptyList())
-        recyclerViewBusinessNews.addItemDecoration(EmptyDividerItemDecoration())
-
-        val businessList = mutableListOf<NewsItem>().apply {
-            Settings.newsAllList.filter { list ->
-                list.textCategory == "business"
-            }
+        val businessList = Settings.newsAllList.filter { list ->
+            list.textCategory == "business"
         }
-        println("Settings.newsAllList = ${Settings.newsAllList}")
         println("filter list = $businessList")
+        recyclerViewBusinessNews = view.findViewById(R.id.recycler_view_news_business)
+        recyclerViewBusinessNews.adapter = NewsAdapter(businessList, this)
+        recyclerViewBusinessNews.layoutManager = LinearLayoutManager(requireContext())
+        recyclerViewBusinessNews.addItemDecoration(EmptyDividerItemDecoration())
         newsAdapter.updateList(businessList)
+    }
+
+    override fun onItemNewsClicked(itemNews: NewsItem) {
+
     }
 }
