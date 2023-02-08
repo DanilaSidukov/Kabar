@@ -5,11 +5,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/custom_news_toolbar"
-        layout="@layout/custom_news_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="60dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="99dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_kabar_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_gravity="end"
+            android:layout_width="32dp"
+            app:cardCornerRadius="6dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="24dp"
+            android:padding="10dp"
+            android:elevation="10dp">
+
+            <ImageButton
+                android:id="@+id/button_notification"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_notification"
+                android:background="@android:color/transparent"
+                android:elevation="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.appcompat.widget.Toolbar>
 
     <TextView
         android:id="@+id/text_latest"

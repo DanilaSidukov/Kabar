@@ -2,6 +2,9 @@ package com.sidukov.kabar.data
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.sidukov.kabar.data.database.EntityBookmarkNews
+import com.sidukov.kabar.data.database.NewsBookmarkDao
+import com.sidukov.kabar.data.database.NewsDao
 import com.sidukov.kabar.data.remote.api.ApiClient
 import com.sidukov.kabar.domain.NewsItem
 import java.text.SimpleDateFormat
@@ -10,6 +13,8 @@ import javax.inject.Inject
 
 class NewsRepository @Inject constructor(
     private val apiClient: ApiClient,
+    private val newsDao: NewsDao,
+    private val newsBookmarkDao: NewsBookmarkDao
 ) {
 
     companion object {
@@ -36,6 +41,30 @@ class NewsRepository @Inject constructor(
             }
         }
         return responseNewsList
+    }
+
+    suspend fun addBookmark(bookmarkData: NewsItem){
+        val bookmarkItem = EntityBookmarkNews(
+            bookmarkData.titleText!!,
+            bookmarkData.textCategory!!,
+            bookmarkData.description!!,
+            bookmarkData.newsImage,
+            bookmarkData.author!!,
+            bookmarkData.date
+        )
+        newsBookmarkDao.addToBookmarkNews(bookmarkItem)
+    }
+
+    suspend fun deleteFromBookmark(bookmarkData: NewsItem){
+        val bookmarkItem = EntityBookmarkNews(
+            bookmarkData.titleText!!,
+            bookmarkData.textCategory!!,
+            bookmarkData.description!!,
+            bookmarkData.newsImage,
+            bookmarkData.author!!,
+            bookmarkData.date
+        )
+        newsBookmarkDao.deleteBookmarkNews(bookmarkItem)
     }
 
     private fun String.convertToDate(): Date? =

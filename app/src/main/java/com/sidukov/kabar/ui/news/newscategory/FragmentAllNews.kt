@@ -37,6 +37,7 @@ class FragmentAllNews : BaseViewPagerFragment(R.layout.fragment_all_news), OnIte
         super.onViewCreated(view, savedInstanceState)
         NewsApplication.appComponent.inject(this)
         newsViewModel= injectViewModel(viewModelFactory)
+//            parentFragment?.activity?.let { ViewModelProvider(it.viewModelStore, viewModelFactory)[NewsViewModel::class.java] }!!
 
         recyclerViewAllNews = view.findViewById(R.id.recycler_view_news_all)
         recyclerViewAllNews.adapter = newsAdapter

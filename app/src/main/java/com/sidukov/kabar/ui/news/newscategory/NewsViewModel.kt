@@ -25,6 +25,7 @@ open class NewsViewModel @Inject constructor(
     var newsList: List<NewsItem> = (emptyList())
 
     init {
+        println("viewModel created")
         viewModelScope.launch {
             val value = repository.getNews()
             if (value.isEmpty()) return@launch

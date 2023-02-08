@@ -1,17 +1,17 @@
 package com.sidukov.kabar.ui.news.newscategory
 
-import android.os.Build
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sidukov.kabar.R
 import com.sidukov.kabar.data.settings.Settings
 import com.sidukov.kabar.domain.NewsItem
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
+import java.io.Serializable
 
 class FragmentBusinessNews : BaseViewPagerFragment(R.layout.fragment_business_news), OnItemNewsClicked {
 
@@ -34,13 +34,19 @@ class FragmentBusinessNews : BaseViewPagerFragment(R.layout.fragment_business_ne
         }
         println("filter list = $businessList")
         recyclerViewBusinessNews = view.findViewById(R.id.recycler_view_news_business)
-        recyclerViewBusinessNews.adapter = NewsAdapter(businessList, this)
         recyclerViewBusinessNews.layoutManager = LinearLayoutManager(requireContext())
         recyclerViewBusinessNews.addItemDecoration(EmptyDividerItemDecoration())
+        recyclerViewBusinessNews.adapter = newsAdapter
         newsAdapter.updateList(businessList)
     }
 
     override fun onItemNewsClicked(itemNews: NewsItem) {
-
+        parentFragment?.activity?.let { generalActivity ->
+            startActivity(
+                Intent(generalActivity, ActivityArticleNews::class.java).also {
+                    it.putExtra("item_news", itemNews as Serializable)
+                }
+            )
+        }
     }
 }

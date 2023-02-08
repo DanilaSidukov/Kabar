@@ -44,7 +44,7 @@ class NewsAdapter(
             listener.onItemNewsClicked(newsList[position])
         }
 
-        if (newsList[position].newsImage != null) Picasso.get().load(newsList[position].newsImage)
+        if (newsList[position].newsImage != null || !newsList[position].newsImage.isNullOrBlank()) Picasso.get().load(newsList[position].newsImage)
             .into(holder.newsImage)
         else holder.newsImage.setImageResource(R.drawable.ic_news)
         holder.category.text = newsList[position].textCategory

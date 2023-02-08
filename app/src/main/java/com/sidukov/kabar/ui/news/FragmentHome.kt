@@ -12,7 +12,7 @@ import com.sidukov.kabar.R
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
 import com.sidukov.kabar.ui.news.newscategory.ViewPagerNewsAdapter
 
-class FragmentHome : BaseViewPagerFragment(R.layout.fragment_news) {
+class FragmentHome : BaseViewPagerFragment(R.layout.fragment_home) {
 
     private lateinit var viewPagerNews: ViewPager2
     private lateinit var tabLayoutNews: TabLayout
@@ -22,7 +22,7 @@ class FragmentHome : BaseViewPagerFragment(R.layout.fragment_news) {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        return inflater.inflate(R.layout.fragment_news, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

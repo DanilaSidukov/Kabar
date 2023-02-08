@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
 import com.sidukov.kabar.R
+import com.sidukov.kabar.data.NewsRepository
 import com.sidukov.kabar.domain.NewsItem
 import com.sidukov.kabar.ui.news.newscategory.NewsAdapter.Companion.difference
 import com.squareup.picasso.Picasso
+import javax.inject.Inject
 
 class ActivityArticleNews() : AppCompatActivity() {
 
@@ -23,6 +26,8 @@ class ActivityArticleNews() : AppCompatActivity() {
     private lateinit var textCategoryOneNews: TextView
     private lateinit var titleOneNews: TextView
     private lateinit var textDescriptionOneNews: TextView
+
+    lateinit var newsRepository: NewsRepository
 
 
     @SuppressLint("Recycle")
@@ -43,11 +48,12 @@ class ActivityArticleNews() : AppCompatActivity() {
         titleOneNews = findViewById(R.id.text_title_news_one)
         textDescriptionOneNews = findViewById(R.id.text_description_news_one)
 
-        Picasso.get().load(newsItem?.authorImage ?: R.drawable.ic_pencil_news)
-            .into(imageAuthorOneNews)
+        if (newsItem?.authorImage == null) imageAuthorOneNews.setImageResource(R.drawable.ic_pencil_news)
+        else Picasso.get().load(newsItem.authorImage).into(imageAuthorOneNews)
         textAuthorOneNews.text = newsItem?.author
         dateOneNews.text = newsItem?.date.difference()
-        Picasso.get().load(newsItem?.newsImage).into(imageOneNews)
+        if (newsItem?.newsImage.isNullOrBlank()) imageOneNews.setImageResource(R.drawable.ic_news)
+        else Picasso.get().load(newsItem?.newsImage).into(imageOneNews)
         textCategoryOneNews.text = newsItem?.textCategory
         titleOneNews.text = newsItem?.titleText
         textDescriptionOneNews.text = newsItem?.description
@@ -79,11 +85,17 @@ class ActivityArticleNews() : AppCompatActivity() {
                 bookmarkButton.speed = 0.5f
                 bookmarkButton.playAnimation()
                 booleanBookmark = false
+                lifecycleScope.launchWhenStarted {
+                    newsRepository.addBookmark(newsItem!!)
+                }
             } else {
                 bookmarkButton.setMinProgress(0.5f)
                 bookmarkButton.speed = -0.5f
                 bookmarkButton.playAnimation()
                 booleanBookmark = true
+                lifecycleScope.launchWhenStarted {
+                    newsRepository.deleteFromBookmark(newsItem!!)
+                }
             }
         }
     }

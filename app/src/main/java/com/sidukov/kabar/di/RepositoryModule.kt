@@ -1,6 +1,8 @@
 package com.sidukov.kabar.di
 
 import com.sidukov.kabar.data.NewsRepository
+import com.sidukov.kabar.data.database.NewsBookmarkDao
+import com.sidukov.kabar.data.database.NewsDao
 import com.sidukov.kabar.data.remote.api.ApiClient
 import dagger.Module
 import dagger.Provides
@@ -13,6 +15,8 @@ class RepositoryModule {
     @Provides
     fun provideNewsRepository(
         apiClient: ApiClient,
-    ): NewsRepository = NewsRepository(apiClient)
+        newsDao: NewsDao,
+        newsBookmarkDao: NewsBookmarkDao
+    ): NewsRepository = NewsRepository(apiClient, newsDao, newsBookmarkDao)
 
 }
