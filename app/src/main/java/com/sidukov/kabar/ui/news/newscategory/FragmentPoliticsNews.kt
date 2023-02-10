@@ -7,11 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sidukov.kabar.R
-import com.sidukov.kabar.data.settings.Settings
+import com.sidukov.kabar.data.NewsRepository
+import com.sidukov.kabar.data.database.EntityNews
 import com.sidukov.kabar.domain.NewsItem
+import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
 import java.io.Serializable
 import javax.inject.Inject
@@ -20,7 +23,8 @@ class FragmentPoliticsNews: BaseViewPagerFragment(R.layout.fragment_politics_new
 
     private lateinit var recyclerPoliticsNews: RecyclerView
     private var newsAdapter = NewsAdapter(emptyList(), this)
-
+    @Inject
+    lateinit var newsRepository: NewsRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,19 +36,20 @@ class FragmentPoliticsNews: BaseViewPagerFragment(R.layout.fragment_politics_new
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        NewsApplication.appComponent.inject(this)
 
-        val politicsList = Settings.newsAllList.filter { list ->
-            list.textCategory == "politics"
-        }
         recyclerPoliticsNews = view.findViewById(R.id.recycler_view_news_politics)
         recyclerPoliticsNews.layoutManager = LinearLayoutManager(requireContext())
         recyclerPoliticsNews.addItemDecoration(EmptyDividerItemDecoration())
-        recyclerPoliticsNews.adapter = NewsAdapter(politicsList, this)
-        newsAdapter.updateList(politicsList)
+        recyclerPoliticsNews.adapter = newsAdapter
 
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            val politicsList = newsRepository.getAllNews().filter { it.category == "politics" }
+            newsAdapter.updateList(politicsList)
+        }
     }
 
-    override fun onItemNewsClicked(itemNews: NewsItem) {
+    override fun onItemNewsClicked(itemNews: EntityNews) {
         parentFragment?.activity?.let { generalActivity ->
             startActivity(
                 Intent(generalActivity, ActivityArticleNews::class.java).also {

@@ -13,6 +13,9 @@ interface NewsDao {
     @Query("SELECT * FROM entitynews")
     suspend fun getAll(): List<EntityNews>
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addNews(newsData: EntityNews)
+
     @Delete
     suspend fun deleteNews(newsData: EntityNews)
 
@@ -20,12 +23,15 @@ interface NewsDao {
 
 @Dao
 interface NewsBookmarkDao {
-    @Query ("SELECT * FROM entitybookmarknews")
-    suspend fun getBookmarkNews(): List<EntityBookmarkNews>
+    @Query ("SELECT * FROM entitynews")
+    suspend fun getBookmarkNews(): List<EntityNews>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addToBookmarkNews(newsData: EntityBookmarkNews)
+    suspend fun addToBookmarkNews(newsData: EntityNews)
+
+    @Update
+    suspend fun updateBookmarkNews(newsData: EntityNews)
 
     @Delete
-    suspend fun deleteBookmarkNews(newsData: EntityBookmarkNews)
+    suspend fun deleteBookmarkNews(newsData: EntityNews)
 }

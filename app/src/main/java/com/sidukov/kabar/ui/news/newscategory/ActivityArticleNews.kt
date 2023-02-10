@@ -9,7 +9,9 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
 import com.sidukov.kabar.R
 import com.sidukov.kabar.data.NewsRepository
+import com.sidukov.kabar.data.database.EntityNews
 import com.sidukov.kabar.domain.NewsItem
+import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.news.newscategory.NewsAdapter.Companion.difference
 import com.squareup.picasso.Picasso
 import javax.inject.Inject
@@ -27,16 +29,17 @@ class ActivityArticleNews() : AppCompatActivity() {
     private lateinit var titleOneNews: TextView
     private lateinit var textDescriptionOneNews: TextView
 
+    @Inject
     lateinit var newsRepository: NewsRepository
-
 
     @SuppressLint("Recycle")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_article_news)
+        NewsApplication.appComponent.inject(this)
 
         val bundle = intent.extras
-        val newsItem =  bundle?.getSerializable("item_news") as NewsItem?
+        val newsItem =  bundle?.getSerializable("item_news") as EntityNews?
 
         println("$newsItem")
 
@@ -54,37 +57,55 @@ class ActivityArticleNews() : AppCompatActivity() {
         dateOneNews.text = newsItem?.date.difference()
         if (newsItem?.newsImage.isNullOrBlank()) imageOneNews.setImageResource(R.drawable.ic_news)
         else Picasso.get().load(newsItem?.newsImage).into(imageOneNews)
-        textCategoryOneNews.text = newsItem?.textCategory
-        titleOneNews.text = newsItem?.titleText
+        textCategoryOneNews.text = newsItem?.category
+        titleOneNews.text = newsItem?.title
         textDescriptionOneNews.text = newsItem?.description
 
+        lifecycleScope.launchWhenStarted {
+            val bookmarkList = newsRepository.getBookmarkNews().map { it.title }
+            if (titleOneNews.text in bookmarkList ){
+                bookmarkButton.progress = 0f
+            } else bookmarkButton.progress = 0.5f
+            if (newsItem?.likeBoolean!!) likeButton.progress = 0.5f
+            else likeButton.progress = 0f
+        }
+
         likeButton = findViewById(R.id.animated_like_news_one)
-        var booleanLike = true
+        var booleanLike = false
         likeButton.setOnClickListener {
-            if (booleanLike) {
+            if (!newsItem?.likeBoolean!!) {
+                likeButton.setMinProgress(0f)
                 likeButton.setMaxProgress(0.5f)
                 likeButton.speed = 0.5f
                 likeButton.playAnimation()
-                booleanLike = false
+                newsItem.likeBoolean = true
+                booleanLike = true
+                lifecycleScope.launchWhenStarted {
+                    newsRepository.updateBookmarkItem(newsItem!!)
+                }
             } else {
                 likeButton.setMinProgress(0.5f)
                 likeButton.setMaxProgress(1f)
                 likeButton.speed = 0.5f
                 likeButton.playAnimation()
-                booleanLike = true
+                newsItem.likeBoolean = false
+                booleanLike = false
+                lifecycleScope.launchWhenStarted {
+                    newsRepository.updateBookmarkItem(newsItem!!)
+                }
             }
         }
 
         bookmarkButton = findViewById(R.id.animated_bookmark_news_one)
-        bookmarkButton.progress = 0.5f
-        var booleanBookmark = true
+        var booleanBookmark = false
         bookmarkButton.setOnClickListener {
-            if (booleanBookmark) {
+            if (!newsItem?.bookmarkBoolean!!) {
                 bookmarkButton.setMinProgress(0.5f)
                 bookmarkButton.setMaxProgress(1f)
                 bookmarkButton.speed = 0.5f
                 bookmarkButton.playAnimation()
-                booleanBookmark = false
+                booleanBookmark = true
+                newsItem.bookmarkBoolean = true
                 lifecycleScope.launchWhenStarted {
                     newsRepository.addBookmark(newsItem!!)
                 }
@@ -93,6 +114,7 @@ class ActivityArticleNews() : AppCompatActivity() {
                 bookmarkButton.speed = -0.5f
                 bookmarkButton.playAnimation()
                 booleanBookmark = true
+                newsItem.bookmarkBoolean = false
                 lifecycleScope.launchWhenStarted {
                     newsRepository.deleteFromBookmark(newsItem!!)
                 }

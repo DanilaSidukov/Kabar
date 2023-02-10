@@ -1,5 +1,7 @@
 package com.sidukov.kabar.di
 
+import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -28,6 +30,10 @@ class ViewModelFactory @Inject constructor(
 inline fun <reified T : ViewModel> Fragment.injectViewModel(factory: ViewModelProvider.Factory): T {
     return ViewModelProvider(this, factory)[T::class.java]
 }
+inline fun <reified T : ViewModel> AppCompatActivity.injectViewModel(factory: ViewModelProvider.Factory): T {
+    return ViewModelProvider(this, factory)[T::class.java]
+}
+
 
 @Module
 abstract class ViewModelModule {
