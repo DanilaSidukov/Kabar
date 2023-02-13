@@ -42,7 +42,7 @@ class ApiModule(private val context: Context){
                     continuation.resumeWithException(e)
                 }
                 override fun onResponse(call: Call, response: Response) {
-                    val a = JsonParser().parse(response.body()?.string())
+                    val a = JsonParser().parse(response.body?.string())
                     val fd = GsonBuilder().create().fromJson(a, NewsBody::class.java)
                     continuation.resume(fd)
                 }

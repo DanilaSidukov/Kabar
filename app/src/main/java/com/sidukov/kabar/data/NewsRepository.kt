@@ -7,6 +7,7 @@ import com.sidukov.kabar.data.database.NewsBookmarkDao
 import com.sidukov.kabar.data.database.NewsDao
 import com.sidukov.kabar.data.remote.api.ApiClient
 import com.sidukov.kabar.ui.news.ActivityGeneral
+import kotlinx.coroutines.flow.Flow
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -32,7 +33,7 @@ open class NewsRepository @Inject constructor(
                     EntityNews(
                         newsImage = newsBody.image_url,
                         category = newsBody.category?.first()!!,
-                        title = newsBody.description!!,
+                        title = newsBody.description ?: "No description",
                         description = newsBody.content!!,
                         authorImage = null,
                         author = newsBody.creator?.first() ?: "No author",
@@ -45,25 +46,24 @@ open class NewsRepository @Inject constructor(
         return responseNewsList
     }
 
-    suspend fun getAllNews() = newsDao.getAll()
+    fun getAllNews() = newsDao.getAll()
 
-    suspend fun deleteNews(newsData: EntityNews) = newsDao.deleteNews(newsData)
+    fun deleteNews(newsData: EntityNews) = newsDao.deleteNews(newsData)
 
-    suspend fun addNewsToDatabase(newsData: EntityNews) = newsDao.addNews(newsData)
+    suspend fun addNewsToDatabase(newsData: List<EntityNews>) = newsDao.addNews(newsData)
 
-    suspend fun addBookmark(bookmarkData: EntityNews) = newsBookmarkDao.addToBookmarkNews(bookmarkData)
+    fun addBookmark(bookmarkData: EntityNews) = newsBookmarkDao.addToBookmarkNews(bookmarkData)
 
-    suspend fun deleteFromBookmark(bookmarkData: EntityNews) = newsBookmarkDao.deleteBookmarkNews(bookmarkData)
+    fun deleteFromBookmark(bookmarkData: EntityNews) = newsBookmarkDao.deleteBookmarkNews(bookmarkData)
 
-    suspend fun getBookmarkNews() = newsBookmarkDao.getBookmarkNews()
+    fun getBookmarkNews() = newsBookmarkDao.getBookmarkNews()
 
-    suspend fun updateBookmarkItem(bookmarkData: EntityNews) = newsBookmarkDao.updateBookmarkNews(bookmarkData)
+    fun updateBookmarkItem(bookmarkData: EntityNews) = newsBookmarkDao.updateBookmarkNews(bookmarkData)
 
     private fun String.convertToDate(): Long? {
 
         val date = SimpleDateFormat(DATE_PATTERN, Locale.getDefault()).parse(this)
         return date.time ?: null
     }
-
 
 }

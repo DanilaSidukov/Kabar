@@ -10,20 +10,23 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 open class NewsViewModel @Inject constructor(
-    repository: NewsRepository
-): ViewModel() {
+    repository: NewsRepository,
+) : ViewModel() {
 
     private val _newsData = MutableSharedFlow<List<EntityNews>>()
     var newsData = _newsData.asSharedFlow()
 
     init {
-        println("viewModel created")
         viewModelScope.launch {
+            println("vm created")
             val value = repository.getNews()
             if (value.isEmpty()) return@launch
-            value.forEach {
-                repository.addNewsToDatabase(it)
+
+            println("value list = $value")
+            launch {
+                repository.addNewsToDatabase(value)
             }
+
             _newsData.emit(value)
         }
     }

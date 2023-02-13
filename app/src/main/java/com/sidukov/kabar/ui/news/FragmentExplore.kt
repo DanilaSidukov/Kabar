@@ -19,7 +19,7 @@ import com.sidukov.kabar.ui.news.newscategory.*
 import java.io.Serializable
 import javax.inject.Inject
 
-class FragmentExplore: BaseViewPagerFragment(R.layout.fragment_explore), OnItemNewsClicked{
+class FragmentExplore : BaseViewPagerFragment(R.layout.fragment_explore), OnItemNewsClicked {
 
     private lateinit var popularTopicRecyclerView: RecyclerView
     private val newsAdapter = NewsAdapter(emptyList(), this)
@@ -31,7 +31,7 @@ class FragmentExplore: BaseViewPagerFragment(R.layout.fragment_explore), OnItemN
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         return inflater.inflate(R.layout.fragment_explore, container, false)
     }
@@ -45,8 +45,11 @@ class FragmentExplore: BaseViewPagerFragment(R.layout.fragment_explore), OnItemN
         popularTopicRecyclerView.addItemDecoration(EmptyDividerItemDecoration())
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            val topicNews = newsRepository.getNews().filter { it.category == "top" }
-            newsAdapter.updateList(topicNews)
+            val topicNews = newsRepository.getAllNews()
+            topicNews.collect { list ->
+                val topicList = list.filter { it.category == "top" }
+                newsAdapter.updateList(topicList)
+            }
         }
 
         textSeeAll = view.findViewById(R.id.text_see_all)

@@ -30,6 +30,7 @@ class ViewModelFactory @Inject constructor(
 inline fun <reified T : ViewModel> Fragment.injectViewModel(factory: ViewModelProvider.Factory): T {
     return ViewModelProvider(this, factory)[T::class.java]
 }
+
 inline fun <reified T : ViewModel> AppCompatActivity.injectViewModel(factory: ViewModelProvider.Factory): T {
     return ViewModelProvider(this, factory)[T::class.java]
 }
@@ -45,5 +46,4 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(NewsViewModel::class)
     internal abstract fun newsViewModel(newsViewModel: NewsViewModel): ViewModel
-
 }

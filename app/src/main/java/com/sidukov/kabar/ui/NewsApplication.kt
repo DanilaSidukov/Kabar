@@ -1,7 +1,9 @@
 package com.sidukov.kabar.ui
 
 import android.app.Application
+import android.content.Context
 import android.os.Build
+import android.view.ContextThemeWrapper
 import androidx.annotation.RequiresApi
 import com.sidukov.kabar.data.NewsRepository
 import com.sidukov.kabar.di.*
@@ -19,6 +21,7 @@ class NewsApplication : Application() {
 
     companion object {
         lateinit var appComponent: NewsAppComponent
+
     }
 
     override fun onCreate() {

@@ -45,14 +45,14 @@ class ViewPagerNewsAdapter(
 
     override fun replaceDef(position: Int, isNotify: Boolean): BaseViewPagerFragment {
         val fragment = when(position){
-            0 -> FragmentAllNews()
-            1 -> FragmentBusinessNews()
-            2 -> FragmentEntertainmentNews()
-            3 -> FragmentHealthAndFoodNews()
-            4 -> FragmentScienceNews()
-            5 -> FragmentSportsNews()
-            6 -> FragmentTechnologyNews()
-            7 -> FragmentPoliticsNews()
+//            0 -> FragmentAllNews()
+//            1 -> FragmentBusinessNews()
+//            2 -> FragmentEntertainmentNews()
+//            3 -> FragmentHealthAndFoodNews()
+//            4 -> FragmentScienceNews()
+//            5 -> FragmentSportsNews()
+//            6 -> FragmentTechnologyNews()
+//            7 -> FragmentPoliticsNews()
             else -> throw  IllegalStateException()
         }
         replace(position, fragment, isNotify)

@@ -62,12 +62,16 @@ class ActivityArticleNews() : AppCompatActivity() {
         textDescriptionOneNews.text = newsItem?.description
 
         lifecycleScope.launchWhenStarted {
-            val bookmarkList = newsRepository.getBookmarkNews().map { it.title }
-            if (titleOneNews.text in bookmarkList ){
-                bookmarkButton.progress = 0f
-            } else bookmarkButton.progress = 0.5f
-            if (newsItem?.likeBoolean!!) likeButton.progress = 0.5f
-            else likeButton.progress = 0f
+            val bookmarkList = newsRepository.getBookmarkNews()
+            bookmarkList.collect{ list ->
+                val titleList = list.map { it.title }
+
+                if (titleOneNews.text in titleList ){
+                    bookmarkButton.progress = 0f
+                } else bookmarkButton.progress = 0.5f
+                if (newsItem?.likeBoolean!!) likeButton.progress = 0.5f
+                else likeButton.progress = 0f
+            }
         }
 
         likeButton = findViewById(R.id.animated_like_news_one)
@@ -81,7 +85,7 @@ class ActivityArticleNews() : AppCompatActivity() {
                 newsItem.likeBoolean = true
                 booleanLike = true
                 lifecycleScope.launchWhenStarted {
-                    newsRepository.updateBookmarkItem(newsItem!!)
+                    newsRepository.updateBookmarkItem(newsItem)
                 }
             } else {
                 likeButton.setMinProgress(0.5f)
@@ -91,7 +95,7 @@ class ActivityArticleNews() : AppCompatActivity() {
                 newsItem.likeBoolean = false
                 booleanLike = false
                 lifecycleScope.launchWhenStarted {
-                    newsRepository.updateBookmarkItem(newsItem!!)
+                    newsRepository.updateBookmarkItem(newsItem)
                 }
             }
         }
@@ -107,7 +111,7 @@ class ActivityArticleNews() : AppCompatActivity() {
                 booleanBookmark = true
                 newsItem.bookmarkBoolean = true
                 lifecycleScope.launchWhenStarted {
-                    newsRepository.addBookmark(newsItem!!)
+                    newsRepository.addBookmark(newsItem)
                 }
             } else {
                 bookmarkButton.setMinProgress(0.5f)
@@ -116,7 +120,7 @@ class ActivityArticleNews() : AppCompatActivity() {
                 booleanBookmark = true
                 newsItem.bookmarkBoolean = false
                 lifecycleScope.launchWhenStarted {
-                    newsRepository.deleteFromBookmark(newsItem!!)
+                    newsRepository.deleteFromBookmark(newsItem)
                 }
             }
         }

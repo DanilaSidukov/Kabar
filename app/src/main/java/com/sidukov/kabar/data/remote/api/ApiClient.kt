@@ -1,18 +1,12 @@
 package com.sidukov.kabar.data.remote.api
 
 import android.content.Context
-import androidx.room.util.StringUtil
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonParseException
 import com.google.gson.JsonParser
 import com.sidukov.kabar.data.settings.Settings.Companion.API_KEY
 import com.sidukov.kabar.domain.news_body.NewsBody
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.*
 import java.io.IOException
-import java.net.URLEncoder
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -43,7 +37,7 @@ class ApiClient @Inject constructor(val context: Context) {
                     continuation.resumeWithException(e)
                 }
                 override fun onResponse(call: Call, response: Response) {
-                    val a = JsonParser().parse(response.body()?.string())
+                    val a = JsonParser().parse(response.body?.string())
                     val fd = GsonBuilder().create().fromJson(a, NewsBody::class.java)
                     continuation.resume(fd)
                 }

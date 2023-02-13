@@ -44,7 +44,7 @@ class ExampleUnitTest {
             .build()
 
         val a = client.newCall(request).execute().use {
-            println("response = ${it?.body()?.string()}")
+            println("response = ${it?.body?.string()}")
         }
 
 

@@ -15,10 +15,8 @@ import com.sidukov.kabar.data.database.EntityNews
 import com.sidukov.kabar.domain.NewsItem
 import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
-import com.sidukov.kabar.ui.news.newscategory.ActivityArticleNews
-import com.sidukov.kabar.ui.news.newscategory.EmptyDividerItemDecoration
-import com.sidukov.kabar.ui.news.newscategory.NewsAdapter
-import com.sidukov.kabar.ui.news.newscategory.OnItemNewsClicked
+import com.sidukov.kabar.ui.news.newscategory.*
+import kotlinx.coroutines.flow.collect
 import java.io.Serializable
 import javax.inject.Inject
 
@@ -49,7 +47,9 @@ class FragmentBookmark: BaseViewPagerFragment(R.layout.fragment_bookmark), OnIte
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             val bookmarkNews = newsRepository.getBookmarkNews()
-            newsAdapter.updateList(bookmarkNews)
+            bookmarkNews.collect{ list ->
+                newsAdapter.updateList(list)
+            }
         }
 
         buttonSettings = view.findViewById(R.id.button_settings)
@@ -64,7 +64,6 @@ class FragmentBookmark: BaseViewPagerFragment(R.layout.fragment_bookmark), OnIte
                     it.putExtra("item_news", itemNews as Serializable)
                 }
             )
-            println("here")
         }
     }
 

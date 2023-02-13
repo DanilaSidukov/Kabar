@@ -12,6 +12,7 @@ import com.sidukov.kabar.data.NewsRepository.Companion.DATE_PATTERN
 import com.sidukov.kabar.data.database.EntityNews
 import com.sidukov.kabar.ui.news.newscategory.NewsAdapter.Companion.difference
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.flow.*
 import java.text.SimpleDateFormat
 import java.time.Period
 import java.time.format.DateTimeFormatter
@@ -82,6 +83,8 @@ class NewsAdapter(
     }
 
 }
+
+suspend fun <T> Flow<List<T>>.flattenToList() = flatMapConcat { it.asFlow()}.toList()
 
 interface OnItemNewsClicked {
     fun onItemNewsClicked(itemNews: EntityNews)

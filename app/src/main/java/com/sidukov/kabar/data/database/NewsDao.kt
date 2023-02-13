@@ -1,37 +1,33 @@
 package com.sidukov.kabar.data.database
 
 import androidx.room.*
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NewsDao {
 
     @Query("SELECT * FROM entitynews")
-    suspend fun getAll(): List<EntityNews>
+    fun getAll(): Flow<List<EntityNews>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addNews(newsData: EntityNews)
+    suspend fun addNews(newsData: List<EntityNews>)
 
     @Delete
-    suspend fun deleteNews(newsData: EntityNews)
+    fun deleteNews(newsData: EntityNews)
 
 }
 
 @Dao
 interface NewsBookmarkDao {
-    @Query ("SELECT * FROM entitynews")
-    suspend fun getBookmarkNews(): List<EntityNews>
+    @Query("SELECT * FROM entitynews")
+    fun getBookmarkNews(): Flow<List<EntityNews>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addToBookmarkNews(newsData: EntityNews)
+    fun addToBookmarkNews(newsData:EntityNews)
 
     @Update
-    suspend fun updateBookmarkNews(newsData: EntityNews)
+    fun updateBookmarkNews(newsData: EntityNews)
 
     @Delete
-    suspend fun deleteBookmarkNews(newsData: EntityNews)
+    fun deleteBookmarkNews(newsData: EntityNews)
 }
