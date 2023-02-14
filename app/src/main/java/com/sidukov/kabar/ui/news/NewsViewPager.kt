@@ -16,6 +16,8 @@ import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterStart
+import androidx.compose.ui.Alignment.Companion.Start
 import androidx.compose.ui.Alignment.Companion.Top
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -203,19 +205,6 @@ fun OpenArticleActivity(item: EntityNews){
 }
 
 @Composable
-fun OnClick(newsItem: EntityNews){
-    object : OnItemNewsClicked {
-        override fun onItemNewsClicked(itemNews: EntityNews) {
-            ActivityArticleNews().startActivity(
-                Intent(ActivityGeneral().baseContext, ActivityArticleNews::class.java).also {
-                    it.putExtra("item_news", itemNews as Serializable)
-                }
-            )
-        }
-    }
-}
-
-@Composable
 fun ItemNews(
     item: EntityNews = EntityNews("news",
         "all",
@@ -269,9 +258,9 @@ fun ItemNews(
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    horizontalArrangement = Arrangement.Start,
                     modifier = Modifier
-                        .wrapContentWidth()
+                        .width(120.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_pencil_news),

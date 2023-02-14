@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sidukov.kabar.R
 import com.sidukov.kabar.data.NewsRepository
 import com.sidukov.kabar.data.database.EntityNews
+import com.sidukov.kabar.di.injectViewModel
 import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
 import com.sidukov.kabar.ui.news.newscategory.*
+import kotlinx.coroutines.launch
 import java.io.Serializable
 import javax.inject.Inject
 
@@ -26,7 +28,8 @@ class FragmentExplore : BaseViewPagerFragment(R.layout.fragment_explore), OnItem
     private lateinit var textSeeAll: TextView
 
     @Inject
-    lateinit var newsRepository: NewsRepository
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var newsViewModel: NewsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,16 +42,18 @@ class FragmentExplore : BaseViewPagerFragment(R.layout.fragment_explore), OnItem
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         NewsApplication.appComponent.inject(this)
+        newsViewModel = injectViewModel(viewModelFactory)
 
         popularTopicRecyclerView = view.findViewById(R.id.popular_topic_recycler_view_explore)
         popularTopicRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         popularTopicRecyclerView.addItemDecoration(EmptyDividerItemDecoration())
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            val topicNews = newsRepository.getAllNews()
-            topicNews.collect { list ->
-                val topicList = list.filter { it.category == "top" }
-                newsAdapter.updateList(topicList)
+            launch {
+                newsViewModel.newsData.collect{list ->
+                    val topicList = list.filter { it.category == "top" }
+                    newsAdapter.updateList(topicList)
+                }
             }
         }
 

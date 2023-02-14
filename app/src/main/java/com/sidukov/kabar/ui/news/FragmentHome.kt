@@ -22,6 +22,7 @@ import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
 import com.sidukov.kabar.ui.news.newscategory.NewsViewModel
 import com.sidukov.kabar.ui.news.newscategory.ViewPagerNewsAdapter
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.coroutines.launch
 import java.lang.annotation.Inherited
 import javax.inject.Inject
 
@@ -107,20 +108,17 @@ class FragmentHome : BaseViewPagerFragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         NewsApplication.appComponent.inject(this)
-        newsViewModel =injectViewModel(newsViewModelFactory)
+        newsViewModel = injectViewModel(newsViewModelFactory)
 
         tableLayoutNews = view.findViewById(R.id.table_layout_news)
-//
-//        viewPagerNews = view.findViewById(R.id.view_pager2_news)
-//        viewPagerNews.adapter = ViewPagerNewsAdapter(this)
-//        viewPagerNews.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-//        viewPagerNews.isUserInputEnabled = true
-
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            newsViewModel.newsData.collect{
-                tableLayoutNews.setContent {
-                    MaterialTheme {
-                        NewsViewPager(it)
+            newsViewModel.requestNews()
+            launch {
+                newsViewModel.newsData.collect{
+                    tableLayoutNews.setContent {
+                        MaterialTheme {
+                            NewsViewPager(it)
+                        }
                     }
                 }
             }

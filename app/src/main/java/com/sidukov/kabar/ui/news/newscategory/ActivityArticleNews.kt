@@ -5,15 +5,16 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
 import com.sidukov.kabar.R
-import com.sidukov.kabar.data.NewsRepository
 import com.sidukov.kabar.data.database.EntityNews
-import com.sidukov.kabar.domain.NewsItem
+import com.sidukov.kabar.di.injectViewModel
 import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.news.newscategory.NewsAdapter.Companion.difference
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ActivityArticleNews() : AppCompatActivity() {
@@ -30,7 +31,8 @@ class ActivityArticleNews() : AppCompatActivity() {
     private lateinit var textDescriptionOneNews: TextView
 
     @Inject
-    lateinit var newsRepository: NewsRepository
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var newsViewModel: NewsViewModel
 
     @SuppressLint("Recycle")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,10 +40,13 @@ class ActivityArticleNews() : AppCompatActivity() {
         setContentView(R.layout.activity_article_news)
         NewsApplication.appComponent.inject(this)
 
-        val bundle = intent.extras
-        val newsItem =  bundle?.getSerializable("item_news") as EntityNews?
+        newsViewModel = injectViewModel(viewModelFactory)
 
-        println("$newsItem")
+        likeButton = findViewById(R.id.animated_like_news_one)
+        bookmarkButton = findViewById(R.id.animated_bookmark_news_one)
+
+        val bundle = intent.extras
+        val newsItem = bundle?.getSerializable("item_news") as EntityNews?
 
         imageAuthorOneNews = findViewById(R.id.image_author_one_news)
         textAuthorOneNews = findViewById(R.id.text_author_one_news)
@@ -62,19 +67,18 @@ class ActivityArticleNews() : AppCompatActivity() {
         textDescriptionOneNews.text = newsItem?.description
 
         lifecycleScope.launchWhenStarted {
-            val bookmarkList = newsRepository.getBookmarkNews()
-            bookmarkList.collect{ list ->
+            newsViewModel.bookmarkData.collect { list ->
                 val titleList = list.map { it.title }
-
-                if (titleOneNews.text in titleList ){
+                if (titleOneNews.text in titleList) {
                     bookmarkButton.progress = 0f
-                } else bookmarkButton.progress = 0.5f
+                } else {
+                    bookmarkButton.progress = 0.5f
+                }
                 if (newsItem?.likeBoolean!!) likeButton.progress = 0.5f
                 else likeButton.progress = 0f
             }
         }
 
-        likeButton = findViewById(R.id.animated_like_news_one)
         var booleanLike = false
         likeButton.setOnClickListener {
             if (!newsItem?.likeBoolean!!) {
@@ -84,9 +88,8 @@ class ActivityArticleNews() : AppCompatActivity() {
                 likeButton.playAnimation()
                 newsItem.likeBoolean = true
                 booleanLike = true
-                lifecycleScope.launchWhenStarted {
-                    newsRepository.updateBookmarkItem(newsItem)
-                }
+                println("like set")
+                newsViewModel.updateBookmarkData(newsItem)
             } else {
                 likeButton.setMinProgress(0.5f)
                 likeButton.setMaxProgress(1f)
@@ -94,34 +97,32 @@ class ActivityArticleNews() : AppCompatActivity() {
                 likeButton.playAnimation()
                 newsItem.likeBoolean = false
                 booleanLike = false
-                lifecycleScope.launchWhenStarted {
-                    newsRepository.updateBookmarkItem(newsItem)
-                }
+                println("like unset")
+                newsViewModel.updateBookmarkData(newsItem)
             }
         }
 
-        bookmarkButton = findViewById(R.id.animated_bookmark_news_one)
+
         var booleanBookmark = false
         bookmarkButton.setOnClickListener {
             if (!newsItem?.bookmarkBoolean!!) {
-                bookmarkButton.setMinProgress(0.5f)
-                bookmarkButton.setMaxProgress(1f)
-                bookmarkButton.speed = 0.5f
-                bookmarkButton.playAnimation()
-                booleanBookmark = true
-                newsItem.bookmarkBoolean = true
-                lifecycleScope.launchWhenStarted {
-                    newsRepository.addBookmark(newsItem)
-                }
-            } else {
-                bookmarkButton.setMinProgress(0.5f)
+                bookmarkButton.setMaxProgress(0.5f)
+                bookmarkButton.setMinProgress(0f)
                 bookmarkButton.speed = -0.5f
                 bookmarkButton.playAnimation()
                 booleanBookmark = true
+                newsItem.bookmarkBoolean = true
+                println("bookmark set")
+                newsViewModel.addBookmarkData(newsItem)
+            } else {
+                bookmarkButton.setMinProgress(0f)
+                bookmarkButton.setMaxProgress(0.5f)
+                bookmarkButton.speed = 0.5f
+                bookmarkButton.playAnimation()
+                booleanBookmark = true
                 newsItem.bookmarkBoolean = false
-                lifecycleScope.launchWhenStarted {
-                    newsRepository.deleteFromBookmark(newsItem)
-                }
+                println("bookmark unset")
+                newsViewModel.deleteBookmarkData(newsItem)
             }
         }
     }
