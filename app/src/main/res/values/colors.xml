@@ -15,4 +15,5 @@
     <color name="grey_background">#EEF1F4</color>
     <color name="grey_text">#667080</color>
     <color name="like_color">#ED2E7E</color>
+    <color name="transparent">#00FFFFFF</color>
 </resources>

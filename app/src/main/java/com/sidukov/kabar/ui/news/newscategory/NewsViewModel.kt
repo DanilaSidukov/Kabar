@@ -15,6 +15,9 @@ open class NewsViewModel @Inject constructor(
     private val _newsData = MutableSharedFlow<List<EntityNews>>()
     var newsData = _newsData.asSharedFlow()
 
+    private val _isDataLoaded = MutableStateFlow(false)
+    var isDataLoaded = _isDataLoaded.asStateFlow()
+
     private val _bookmarkData =
         repository.getBookmarkNews().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
     var bookmarkData = _bookmarkData
@@ -40,7 +43,8 @@ open class NewsViewModel @Inject constructor(
     suspend fun requestNews() {
         viewModelScope.launch {
             val value = repository.getNews()
-            if (value.isEmpty()) return@launch
+//            if (value.isEmpty()) return@launch
+            _isDataLoaded.emit(true)
             _newsData.emit(value)
         }
     }

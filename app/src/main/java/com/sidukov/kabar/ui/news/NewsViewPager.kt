@@ -1,8 +1,6 @@
 package com.sidukov.kabar.ui.news
 
 import android.annotation.SuppressLint
-import android.app.Application
-import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -16,14 +14,11 @@ import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.Alignment.Companion.CenterStart
-import androidx.compose.ui.Alignment.Companion.Start
 import androidx.compose.ui.Alignment.Companion.Top
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -39,22 +34,22 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sidukov.kabar.R
+import com.sidukov.kabar.data.colors.KabarColors
+import com.sidukov.kabar.data.colors.LightColors
 import com.sidukov.kabar.data.database.EntityNews
-import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.news.FragmentHome.Companion.tempList
 import com.sidukov.kabar.ui.news.newscategory.ActivityArticleNews
 import com.sidukov.kabar.ui.news.newscategory.NewsAdapter.Companion.difference
-import com.sidukov.kabar.ui.news.newscategory.OnItemNewsClicked
 import com.sidukov.kabar.ui.news.newscategory.TabRowItem
 import kotlinx.coroutines.launch
 import java.io.Serializable
 
 @SuppressLint("ResourceType")
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Composable
-@Preview
-fun NewsViewPager(list: List<EntityNews> = tempList) {
+fun NewsViewPager(list: List<EntityNews> = tempList, isDataLoaded: Boolean) {
 
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
@@ -93,109 +88,104 @@ fun NewsViewPager(list: List<EntityNews> = tempList) {
         )
     )
 
-    Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .background(colorResource(id = R.color.white))
+    CompositionLocalProvider(
+        LocalOverscrollConfiguration.provides(null)
     ) {
-        ScrollableTabRow(
+        Column(
             modifier = Modifier
-                .background(colorResource(id = R.color.white)),
-            selectedTabIndex = pagerState.currentPage,
-            divider = { Divider() },
-            edgePadding = 0.dp,
-            indicator = { tabPositions ->
-                TabRowDefaults.Indicator(
-                    Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
-                    color = colorResource(id = R.color.blue),
-                )
-            },
+                .fillMaxHeight()
+                .background(colorResource(id = R.color.white))
         ) {
-            tabRowItem.forEachIndexed { index, item ->
-                val isSelected = pagerState.currentPage == index
-                Tab(
-                    selected = pagerState.currentPage == index,
-                    modifier = Modifier
-                        .background(colorResource(id = R.color.white))
-                        .border(0.dp, color = colorResource(id = R.color.white))
-                        .height(35.dp),
-                    onClick = {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(index)
-                        }
-                    },
-                    text = {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            text = item.title,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            fontStyle = FontStyle(R.font.poppins_regular),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Normal,
-                            textAlign = TextAlign.Center,
-                            color = if (isSelected) {
-                                colorResource(id = R.color.black_2)
-                            } else {
-                                colorResource(id = R.color.anthracite)
+            ScrollableTabRow(
+                modifier = Modifier
+                    .background(colorResource(id = R.color.white)),
+                selectedTabIndex = pagerState.currentPage,
+                divider = { Divider() },
+                edgePadding = 0.dp,
+                indicator = { tabPositions ->
+                    TabRowDefaults.Indicator(
+                        Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
+                        color = colorResource(id = R.color.blue),
+                    )
+                },
+            ) {
+                tabRowItem.forEachIndexed { index, item ->
+                    val isSelected = pagerState.currentPage == index
+                    Tab(
+                        selected = pagerState.currentPage == index,
+                        modifier = Modifier
+                            .background(colorResource(id = R.color.white))
+                            .border(0.dp, color = colorResource(id = R.color.white))
+                            .height(35.dp),
+                        onClick = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(index)
                             }
-                        )
-                    }
-                )
+                        },
+                        text = {
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                text = item.title,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                fontStyle = FontStyle(R.font.poppins_regular),
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.W400,
+                                textAlign = TextAlign.Center,
+                                color = if (isSelected) {
+                                    colorResource(id = R.color.black_2)
+                                } else {
+                                    colorResource(id = R.color.anthracite)
+                                }
+                            )
+                        }
+                    )
+                }
             }
-        }
-        CompositionLocalProvider(
-            LocalRippleTheme provides ClearRippleTheme
-        ) {
-        }
-        HorizontalPager(
-            count = tabRowItem.size,
-            state = pagerState,
-            modifier = Modifier.fillMaxHeight(),
-            verticalAlignment = Top
-        ) {
-            tabRowItem[pagerState.currentPage].screen()
+
+            if (isDataLoaded) {
+                HorizontalPager(
+                    count = tabRowItem.size,
+                    state = pagerState,
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalAlignment = Top
+                ) {
+                    tabRowItem[pagerState.currentPage].screen()
+                }
+            } else LoadingCircleBar()
         }
     }
 }
 
-object ClearRippleTheme : RippleTheme {
-
-    @Composable
-    override fun defaultColor() = Transparent
-
-    @Composable
-    override fun rippleAlpha() = RippleAlpha(
-        draggedAlpha = 0.0f,
-        focusedAlpha = 0.0f,
-        hoveredAlpha = 0.0f,
-        pressedAlpha = 0.0f,
-    )
-}
-
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NewsListItem(list: List<EntityNews>, category: String) {
+fun NewsListItem(list: List<EntityNews>, category: String, onItemClicked: (EntityNews) -> Unit) {
 
     val newsList =
         if (category == "health") list.filter { it.category == "health" || it.category == "food" }
         else if (category == " ") list
         else list.filter { it.category == category }
 
-    LazyColumn(
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp)) {
-        items(newsList.size) { index ->
-            ItemNews(
-                item = newsList[index],
-                onItemClicked = {
-                    OpenArticleActivity(item = newsList[index])
-                }
-            )
+    CompositionLocalProvider(
+        LocalOverscrollConfiguration.provides(null)
+    ) {
+        LazyColumn(
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp)) {
+            items(newsList.size) { index ->
+                ItemNews(
+                    item = newsList[index],
+                    onItemClicked = {
+                        onItemClicked(newsList[index])
+                        // OpenArticleActivity(item = newsList[index])
+                    }
+                )
+            }
         }
     }
 }
 
-fun OpenArticleActivity(item: EntityNews){
+fun OpenArticleActivity(item: EntityNews) {
     val context = ActivityGeneral.generalContext
     context.startActivity(
         Intent(context, ActivityArticleNews::class.java).also {
@@ -213,7 +203,7 @@ fun ItemNews(
         "it's me",
         null,
         323232121212),
-    onItemClicked: () -> Unit
+    onItemClicked: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -297,5 +287,71 @@ fun ItemNews(
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun LoadingCircleBar() {
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly,
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.71f)
+            .background(colorResource(id = R.color.white)),
+
+        ) {
+        Spacer(modifier = Modifier.height(30.dp))
+        CircularProgressIndicator(
+            color = colorResource(id = R.color.blue),
+            modifier = Modifier.size(50.dp)
+        )
+    }
+}
+
+object KabarTheme {
+    val colors: KabarColors
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalColors.current
+
+}
+
+internal val LocalColors = staticCompositionLocalOf { LightColors }
+
+object RippleEffect : RippleTheme {
+    @Composable
+    override fun defaultColor() = KabarTheme.colors.rippleColor
+
+    @Composable
+    override fun rippleAlpha(): RippleAlpha = RippleTheme.defaultRippleAlpha(
+        KabarTheme.colors.rippleColor,
+        lightTheme = !isSystemInDarkTheme(),
+    )
+}
+
+@Composable
+fun KabarTheme(
+    darkTheme: Boolean,
+    content: @Composable () -> Unit,
+) {
+    val colors = LightColors
+    //(if (darkTheme) DarkColors else LightColors)
+
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.setSystemBarsColor(Transparent)
+    }
+
+    androidx.compose.material3.MaterialTheme(
+        colorScheme = colors.material
+    ) {
+        CompositionLocalProvider(
+            LocalColors provides colors,
+            LocalRippleTheme provides RippleEffect,
+            content = content,
+        )
     }
 }

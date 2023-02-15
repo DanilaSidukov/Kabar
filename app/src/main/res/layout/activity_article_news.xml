@@ -58,8 +58,9 @@
                 <TextView
                     android:id="@+id/text_author_one_news"
                     style="@style/TextAppearance.Login_semibold_style_anthracite"
-                    android:layout_width="wrap_content"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
+                    android:maxLines="2"
                     android:layout_marginStart="6dp"
                     android:textColor="?color_black_2"
                     android:textSize="16sp"
@@ -89,7 +90,7 @@
                     app:cardElevation="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/card_view_image_author_news_one">
+                    app:layout_constraintTop_toBottomOf="@id/date_one_news">
 
                     <ImageView
                         android:id="@+id/image_news_one"
