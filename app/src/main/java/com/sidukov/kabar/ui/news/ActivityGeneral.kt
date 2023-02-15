@@ -1,36 +1,20 @@
 package com.sidukov.kabar.ui.news
 
-import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sidukov.kabar.R
-import com.sidukov.kabar.data.NewsRepository
-import com.sidukov.kabar.di.injectViewModel
 import com.sidukov.kabar.ui.NewsApplication
-import com.sidukov.kabar.ui.news.newscategory.NewsViewModel
-import com.sidukov.kabar.ui.news.newscategory.flattenToList
-import java.time.LocalDateTime
-import java.time.ZoneId
-import javax.inject.Inject
 
 class ActivityGeneral : AppCompatActivity(), OpenAllNewsFragment {
 
     private lateinit var bottomNavigationBar: BottomNavigationView
     private lateinit var viewPagerGeneral: ViewPager2
 
-    companion object {
-        lateinit var generalContext: Context
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        generalContext = this
         setContentView(R.layout.activity_general_layout)
         NewsApplication.appComponent.inject(this)
 

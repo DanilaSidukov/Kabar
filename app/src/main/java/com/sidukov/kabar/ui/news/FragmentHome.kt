@@ -1,5 +1,6 @@
 package com.sidukov.kabar.ui.news
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,9 @@ import com.sidukov.kabar.data.database.EntityNews
 import com.sidukov.kabar.di.injectViewModel
 import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
+import com.sidukov.kabar.ui.news.newscategory.ActivityArticleNews
 import com.sidukov.kabar.ui.news.newscategory.NewsViewModel
+import java.io.Serializable
 import javax.inject.Inject
 
 class FragmentHome : BaseViewPagerFragment(R.layout.fragment_home) {
@@ -83,7 +86,6 @@ class FragmentHome : BaseViewPagerFragment(R.layout.fragment_home) {
         )
     }
 
-
     @Inject
     lateinit var newsViewModelFactory: ViewModelProvider.Factory
     lateinit var newsViewModel: NewsViewModel
@@ -113,7 +115,13 @@ class FragmentHome : BaseViewPagerFragment(R.layout.fragment_home) {
                 val newsList by newsViewModel.newsData.collectAsState(emptyList())
                 val isDataLoaded by newsViewModel.isDataLoaded.collectAsState()
 
-                NewsViewPager(newsList, isDataLoaded)
+                NewsViewPager(newsList, isDataLoaded) { entityNews ->
+                    startActivity(
+                        Intent(context, ActivityArticleNews::class.java).also {
+                            it.putExtra("item_news", entityNews as Serializable)
+                        }
+                    )
+                }
             }
         }
     }

@@ -42,49 +42,52 @@ import com.sidukov.kabar.data.database.EntityNews
 import com.sidukov.kabar.ui.news.FragmentHome.Companion.tempList
 import com.sidukov.kabar.ui.news.newscategory.ActivityArticleNews
 import com.sidukov.kabar.ui.news.newscategory.NewsAdapter.Companion.difference
-import com.sidukov.kabar.ui.news.newscategory.TabRowItem
 import kotlinx.coroutines.launch
 import java.io.Serializable
+
+class NewsItem(
+    val name: String,
+    val list: List<EntityNews>,
+)
 
 @SuppressLint("ResourceType")
 @OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun NewsViewPager(list: List<EntityNews> = tempList, isDataLoaded: Boolean) {
+fun NewsViewPager(
+    list: List<EntityNews> = tempList,
+    isDataLoaded: Boolean,
+    onItemClicked: (EntityNews) -> Unit,
+) {
 
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
 
     val tabRowItem = listOf(
-        TabRowItem(
-            title = stringResource(id = R.string.all),
-            screen = { NewsListItem(list = list, category = " ") }
+        NewsItem(
+            stringResource(id = R.string.all), list.filter { it.category == " " }
         ),
-        TabRowItem(
-            title = stringResource(id = R.string.business),
-            screen = { NewsListItem(list = list, category = "business") }
+        NewsItem(
+            stringResource(id = R.string.business), list.filter { it.category == "business" }
         ),
-        TabRowItem(
-            title = stringResource(id = R.string.entertainment),
-            screen = { NewsListItem(list = list, category = "entertainment") }
+        NewsItem(
+            stringResource(id = R.string.entertainment),
+            list.filter { it.category == "entertainment" }
         ),
-        TabRowItem(
-            title = stringResource(id = R.string.health_and_food),
-            screen = { NewsListItem(list = list, category = "health") }
+        NewsItem(
+            stringResource(id = R.string.health_and_food),
+            list.filter { it.category == "health" || it.category == "food" }
         ),
-        TabRowItem(
-            title = stringResource(id = R.string.politics),
-            screen = { NewsListItem(list = list, category = "politics") }
+        NewsItem(
+            stringResource(id = R.string.politics), list.filter { it.category == "politics" }
         ),
-        TabRowItem(
-            title = stringResource(id = R.string.science),
-            screen = { NewsListItem(list = list, category = "science") }
+        NewsItem(
+            stringResource(id = R.string.science), list.filter { it.category == "science" }
         ),
-        TabRowItem(
-            title = stringResource(id = R.string.sports),
-            screen = { NewsListItem(list = list, category = "sports") }
-        ), TabRowItem(
-            title = stringResource(id = R.string.technology),
-            screen = { NewsListItem(list = list, category = "technology") }
+        NewsItem(
+            stringResource(id = R.string.sports), list.filter { it.category == "sports" }
+        ),
+        NewsItem(
+            stringResource(id = R.string.technology), list.filter { it.category == "technology" }
         )
     )
 
@@ -126,7 +129,7 @@ fun NewsViewPager(list: List<EntityNews> = tempList, isDataLoaded: Boolean) {
                             Text(
                                 modifier = Modifier
                                     .fillMaxWidth(),
-                                text = item.title,
+                                text = item.name,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                                 fontStyle = FontStyle(R.font.poppins_regular),
@@ -151,7 +154,10 @@ fun NewsViewPager(list: List<EntityNews> = tempList, isDataLoaded: Boolean) {
                     modifier = Modifier.fillMaxHeight(),
                     verticalAlignment = Top
                 ) {
-                    tabRowItem[pagerState.currentPage].screen()
+                    NewsListItem(
+                        list = list,
+                        onItemClicked = onItemClicked
+                    )
                 }
             } else LoadingCircleBar()
         }
@@ -160,38 +166,23 @@ fun NewsViewPager(list: List<EntityNews> = tempList, isDataLoaded: Boolean) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NewsListItem(list: List<EntityNews>, category: String, onItemClicked: (EntityNews) -> Unit) {
-
-    val newsList =
-        if (category == "health") list.filter { it.category == "health" || it.category == "food" }
-        else if (category == " ") list
-        else list.filter { it.category == category }
-
+fun NewsListItem(list: List<EntityNews>, onItemClicked: (EntityNews) -> Unit) {
     CompositionLocalProvider(
         LocalOverscrollConfiguration.provides(null)
     ) {
         LazyColumn(
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp)) {
-            items(newsList.size) { index ->
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp)
+        ) {
+            items(list.size) { index ->
                 ItemNews(
-                    item = newsList[index],
+                    item = list[index],
                     onItemClicked = {
-                        onItemClicked(newsList[index])
-                        // OpenArticleActivity(item = newsList[index])
+                        onItemClicked(list[index])
                     }
                 )
             }
         }
     }
-}
-
-fun OpenArticleActivity(item: EntityNews) {
-    val context = ActivityGeneral.generalContext
-    context.startActivity(
-        Intent(context, ActivityArticleNews::class.java).also {
-            it.putExtra("item_news", item as Serializable)
-        }
-    )
 }
 
 @Composable
