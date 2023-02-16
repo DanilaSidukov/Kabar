@@ -24,5 +24,6 @@
         <item name="color_red">@color/red</item>
         <item name="color_black_2">@color/black_2</item>
         <item name="color_like">@color/like_color</item>
+        <item name="color_error_red">@color/error_red</item>
     </style>
 </resources>

@@ -12,9 +12,9 @@ import com.sidukov.kabar.R
 import com.sidukov.kabar.data.database.EntityNews
 import com.sidukov.kabar.di.injectViewModel
 import com.sidukov.kabar.ui.NewsApplication
+import com.sidukov.kabar.ui.news.NewsViewModel
 import com.sidukov.kabar.ui.news.newscategory.NewsAdapter.Companion.difference
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ActivityArticleNews() : AppCompatActivity() {
@@ -68,8 +68,8 @@ class ActivityArticleNews() : AppCompatActivity() {
 
         lifecycleScope.launchWhenStarted {
             newsViewModel.bookmarkData.collect { list ->
-                val titleList = list.map { it.title }
-                if (titleOneNews.text in titleList) {
+                val descriptionList = list.map { it.description }
+                if (textDescriptionOneNews.text in descriptionList) {
                     bookmarkButton.progress = 0f
                 } else {
                     bookmarkButton.progress = 0.5f

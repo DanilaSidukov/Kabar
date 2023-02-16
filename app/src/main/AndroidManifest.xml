@@ -17,7 +17,7 @@
         android:theme="@style/Theme.Kabar"
         tools:targetApi="31">
         <activity
-            android:name=".ui.news.ActivityGeneral"
+            android:name=".ui.ActivitySignUp"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,15 +31,31 @@
         </activity>
 
         <activity android:name=".ui.news.newscategory.ActivityArticleNews">
+        </activity>
 
+        <activity android:name=".ui.ActivityLogin">
+        </activity>
 
+        <activity android:name=".ui.news.ActivityGeneral">
+        </activity>
+
+        <activity android:name=".ui.createprofile.ActivityCreateProfile">
+        </activity>
+
+        <activity android:name=".ui.forgotpassword.forgotpassword.ForgotPasswordActivity">
+        </activity>
+
+        <activity android:name=".ui.verification.ActivityVerification">
+        </activity>
+
+        <activity android:name=".ui.StartScreenActivity">
         </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
-            android:grantUriPermissions="true"
             android:exported="false"
+            android:grantUriPermissions="true"
             tools:replace="android:authorities">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"

@@ -17,74 +17,12 @@ import com.sidukov.kabar.di.injectViewModel
 import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
 import com.sidukov.kabar.ui.news.newscategory.ActivityArticleNews
-import com.sidukov.kabar.ui.news.newscategory.NewsViewModel
 import java.io.Serializable
 import javax.inject.Inject
 
 class FragmentHome : BaseViewPagerFragment(R.layout.fragment_home) {
 
     private lateinit var tableLayoutNews: ComposeView
-
-    companion object {
-        val tempList = listOf<EntityNews>(
-            EntityNews("news",
-                "all",
-                "something",
-                null,
-                "it's me",
-                null,
-                323232121212),
-            EntityNews("news",
-                "sports",
-                "something",
-                null,
-                "it's me",
-                null,
-                323232121212),
-            EntityNews("news",
-                "entertainment",
-                "something",
-                null,
-                "it's me",
-                null,
-                323232121212),
-            EntityNews("news",
-                "technology",
-                "something",
-                null,
-                "it's me",
-                null,
-                323232121212),
-            EntityNews("news",
-                "science",
-                "something",
-                null,
-                "it's me",
-                null,
-                323232121212),
-            EntityNews("news",
-                "food",
-                "something",
-                null,
-                "it's me",
-                null,
-                323232121212),
-            EntityNews("news",
-                "haha",
-                "something",
-                null,
-                "it's me",
-                null,
-                323232121212),
-            EntityNews("news",
-                "sports",
-                "something",
-                null,
-                "it's me",
-                null,
-                323232121212),
-        )
-    }
 
     @Inject
     lateinit var newsViewModelFactory: ViewModelProvider.Factory
@@ -105,17 +43,22 @@ class FragmentHome : BaseViewPagerFragment(R.layout.fragment_home) {
 
         tableLayoutNews = view.findViewById(R.id.table_layout_news)
 
+        var newsList = emptyList<EntityNews>()
+
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             newsViewModel.requestNews()
+            newsViewModel.newsData.collect{
+                newsList = it
+            }
         }
 
         tableLayoutNews.setContent {
             MaterialTheme {
 
-                val newsList by newsViewModel.newsData.collectAsState(emptyList())
+                val listOfNews by newsViewModel.newsData.collectAsState(newsList)
                 val isDataLoaded by newsViewModel.isDataLoaded.collectAsState()
 
-                NewsViewPager(newsList, isDataLoaded) { entityNews ->
+                NewsViewPager(listOfNews, isDataLoaded) { entityNews ->
                     startActivity(
                         Intent(context, ActivityArticleNews::class.java).also {
                             it.putExtra("item_news", entityNews as Serializable)

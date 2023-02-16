@@ -19,8 +19,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_bookmark_active" />
-                            <entry key="sourceFile" value="D:\AndroidStudioProjects\Kabar\app\src\main\res\drawable\ic_bookmark_active.svg" />
+                            <entry key="outputName" value="image_show" />
+                            <entry key="sourceFile" value="D:\AndroidStudioProjects\Kabar\app\src\main\res\drawable\image_show.svg" />
                           </map>
                         </option>
                       </PersistentState>

@@ -39,8 +39,6 @@ import com.sidukov.kabar.R
 import com.sidukov.kabar.data.colors.KabarColors
 import com.sidukov.kabar.data.colors.LightColors
 import com.sidukov.kabar.data.database.EntityNews
-import com.sidukov.kabar.ui.news.FragmentHome.Companion.tempList
-import com.sidukov.kabar.ui.news.newscategory.ActivityArticleNews
 import com.sidukov.kabar.ui.news.newscategory.NewsAdapter.Companion.difference
 import kotlinx.coroutines.launch
 import java.io.Serializable
@@ -54,7 +52,7 @@ class NewsItem(
 @OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun NewsViewPager(
-    list: List<EntityNews> = tempList,
+    list: List<EntityNews>,
     isDataLoaded: Boolean,
     onItemClicked: (EntityNews) -> Unit,
 ) {
@@ -62,32 +60,40 @@ fun NewsViewPager(
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
 
+    println("all list = $list")
+
+    val businessList = list.filter { it.category == "business" }
+    val entertainmentList = list.filter { it.category == "entertainment" }
+    val healthAndFoodList = list.filter { it.category == "health" || it.category == "food" }
+    val politicsList = list.filter { it.category == "politics" }
+    val scienceList = list.filter { it.category == "science" }
+    val sportsList = list.filter { it.category == "sports" }
+    val technologyList = list.filter { it.category == "technology" }
+
     val tabRowItem = listOf(
         NewsItem(
-            stringResource(id = R.string.all), list.filter { it.category == " " }
+            stringResource(id = R.string.all), list
         ),
         NewsItem(
-            stringResource(id = R.string.business), list.filter { it.category == "business" }
+            stringResource(id = R.string.business), businessList
         ),
         NewsItem(
-            stringResource(id = R.string.entertainment),
-            list.filter { it.category == "entertainment" }
+            stringResource(id = R.string.entertainment), entertainmentList
         ),
         NewsItem(
-            stringResource(id = R.string.health_and_food),
-            list.filter { it.category == "health" || it.category == "food" }
+            stringResource(id = R.string.health_and_food), healthAndFoodList
         ),
         NewsItem(
-            stringResource(id = R.string.politics), list.filter { it.category == "politics" }
+            stringResource(id = R.string.politics), politicsList
         ),
         NewsItem(
-            stringResource(id = R.string.science), list.filter { it.category == "science" }
+            stringResource(id = R.string.science), scienceList
         ),
         NewsItem(
-            stringResource(id = R.string.sports), list.filter { it.category == "sports" }
+            stringResource(id = R.string.sports), sportsList
         ),
         NewsItem(
-            stringResource(id = R.string.technology), list.filter { it.category == "technology" }
+            stringResource(id = R.string.technology), technologyList
         )
     )
 

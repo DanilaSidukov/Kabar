@@ -1,4 +1,4 @@
-package com.sidukov.kabar.ui.news.newscategory
+package com.sidukov.kabar.ui.news
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -43,7 +43,7 @@ open class NewsViewModel @Inject constructor(
     suspend fun requestNews() {
         viewModelScope.launch {
             val value = repository.getNews()
-//            if (value.isEmpty()) return@launch
+            if (value.isEmpty()) return@launch
             _isDataLoaded.emit(true)
             _newsData.emit(value)
         }

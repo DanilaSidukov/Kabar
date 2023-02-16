@@ -11,7 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sidukov.kabar.R
-import com.sidukov.kabar.data.NewsRepository
 import com.sidukov.kabar.data.database.EntityNews
 import com.sidukov.kabar.di.injectViewModel
 import com.sidukov.kabar.ui.NewsApplication

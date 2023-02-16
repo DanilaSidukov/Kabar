@@ -1,11 +1,10 @@
 package com.sidukov.kabar.di
 
-import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.sidukov.kabar.ui.news.newscategory.NewsViewModel
+import com.sidukov.kabar.ui.news.NewsViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

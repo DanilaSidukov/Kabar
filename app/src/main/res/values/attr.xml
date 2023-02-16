@@ -11,4 +11,5 @@
     <attr name="color_red" format="color" />
     <attr name="color_black_2" format="color" />
     <attr name="color_like" format="color" />
+    <attr name="color_error_red" format="color" />
 </resources>

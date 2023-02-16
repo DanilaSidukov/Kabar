@@ -78,5 +78,18 @@
         app:layout_constraintStart_toStartOf="@id/text_user_name_profile"
         app:layout_constraintTop_toBottomOf="@id/text_user_name_profile"
         tools:text="It's ME" />
+    <TextView
+        android:id="@+id/text_email_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.Login_normal_style_anthracite"
+        android:layout_marginTop="10dp"
+        android:textColor="?color_grey_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/text_user_nickname_profile"
+        app:layout_constraintTop_toBottomOf="@id/text_user_nickname_profile"
+        tools:text="Something@gmail.com" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

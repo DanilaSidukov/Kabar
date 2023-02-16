@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapRegionDecoder
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -18,12 +19,15 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.sidukov.kabar.R
+import com.sidukov.kabar.data.settings.CacheForImage
+import com.sidukov.kabar.data.settings.Profile
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
 
 class FragmentProfile: BaseViewPagerFragment(R.layout.fragment_profile) {
 
     private lateinit var name: TextView
     private lateinit var nickName: TextView
+    private lateinit var email: TextView
 
     private lateinit var imageProfile: ImageView
     private lateinit var imageButton: ImageButton
@@ -43,6 +47,17 @@ class FragmentProfile: BaseViewPagerFragment(R.layout.fragment_profile) {
 
         name = view.findViewById(R.id.text_user_name_profile)
         nickName = view.findViewById(R.id.text_user_nickname_profile)
+        imageProfile = view.findViewById(R.id.avatar_profile)
+        imageButton = view.findViewById(R.id.button_add_avatar_profile)
+        email = view.findViewById(R.id.text_email_profile)
+
+        val bundle = this.activity?.intent?.extras
+        val profileItem = bundle?.getSerializable("profile") as Profile?
+
+        name.text = profileItem?.fullName
+        nickName.text = profileItem?.username
+        email.text = profileItem?.email
+        imageProfile.setImageBitmap(pickedBitmap)
 
         imageButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -54,6 +69,12 @@ class FragmentProfile: BaseViewPagerFragment(R.layout.fragment_profile) {
             }
         }
 
+        val cache = CacheForImage(this.activity!!)
+        val uriFromCache = cache.getUriByFileName("profile_avatar")
+        if (uriFromCache != null) {
+            val bitmapFromCache = MediaStore.Images.Media.getBitmap(this.activity!!.contentResolver, uriFromCache)
+            if (bitmapFromCache != null) imageProfile.setImageBitmap(bitmapFromCache)
+        }
     }
 
     @Deprecated("Deprecated in Java")
@@ -75,13 +96,16 @@ class FragmentProfile: BaseViewPagerFragment(R.layout.fragment_profile) {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 2 && resultCode == Activity.RESULT_OK && data != null) {
             pickedPhoto = data.data
-            if (pickedPhoto != null){
+            if (pickedPhoto != null) {
                 if (Build.VERSION.SDK_INT >= 28) {
-                    val source = ImageDecoder.createSource(requireContext().contentResolver, pickedPhoto!!)
+                    val source =
+                        ImageDecoder.createSource(requireContext().contentResolver, pickedPhoto!!)
                     pickedBitmap = ImageDecoder.decodeBitmap(source)
                     imageProfile.setImageBitmap(pickedBitmap)
                 } else {
-                    pickedBitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, pickedPhoto)
+                    pickedBitmap =
+                        MediaStore.Images.Media.getBitmap(requireContext().contentResolver,
+                            pickedPhoto)
                     imageProfile.setImageBitmap(pickedBitmap)
                 }
             }

@@ -11,15 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sidukov.kabar.R
-import com.sidukov.kabar.data.NewsRepository
 import com.sidukov.kabar.data.database.EntityNews
 import com.sidukov.kabar.di.injectViewModel
-import com.sidukov.kabar.domain.NewsItem
 import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
 import com.sidukov.kabar.ui.news.newscategory.*
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import java.io.Serializable
 import javax.inject.Inject
 
