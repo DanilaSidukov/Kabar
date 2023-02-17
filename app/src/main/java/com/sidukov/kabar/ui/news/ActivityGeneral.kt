@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sidukov.kabar.R
+import com.sidukov.kabar.data.settings.CacheForImage
 import com.sidukov.kabar.ui.NewsApplication
 
 class ActivityGeneral : AppCompatActivity(), OpenAllNewsFragment {
@@ -22,6 +23,8 @@ class ActivityGeneral : AppCompatActivity(), OpenAllNewsFragment {
         viewPagerGeneral.adapter = ViewPagerGeneralAdapter(this)
         viewPagerGeneral.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         viewPagerGeneral.isUserInputEnabled = false
+
+        val cache = CacheForImage(this)
 
         bottomNavigationBar = findViewById(R.id.bottom_navbar)
         bottomNavigationBar.setOnItemSelectedListener { item ->

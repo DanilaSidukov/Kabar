@@ -48,11 +48,9 @@ class FragmentExplore : BaseViewPagerFragment(R.layout.fragment_explore), OnItem
         popularTopicRecyclerView.addItemDecoration(EmptyDividerItemDecoration())
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            launch {
                 newsViewModel.newsData.collect{list ->
                     val topicList = list.filter { it.category == "top" }
                     newsAdapter.updateList(topicList)
-                }
             }
         }
 

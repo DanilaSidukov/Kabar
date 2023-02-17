@@ -81,4 +81,7 @@
     <string name="add_bookmark">Add bookmark</string>
     <string name="like">Like</string>
 
+<!-- fragment profile -->
+    <string name="exit">Exit</string>
+
 </resources>

@@ -62,38 +62,30 @@ fun NewsViewPager(
 
     println("all list = $list")
 
-    val businessList = list.filter { it.category == "business" }
-    val entertainmentList = list.filter { it.category == "entertainment" }
-    val healthAndFoodList = list.filter { it.category == "health" || it.category == "food" }
-    val politicsList = list.filter { it.category == "politics" }
-    val scienceList = list.filter { it.category == "science" }
-    val sportsList = list.filter { it.category == "sports" }
-    val technologyList = list.filter { it.category == "technology" }
-
     val tabRowItem = listOf(
         NewsItem(
             stringResource(id = R.string.all), list
         ),
         NewsItem(
-            stringResource(id = R.string.business), businessList
+            stringResource(id = R.string.business), list.filter { it.category == "business" }
         ),
         NewsItem(
-            stringResource(id = R.string.entertainment), entertainmentList
+            stringResource(id = R.string.entertainment), list.filter { it.category == "entertainment" }
         ),
         NewsItem(
-            stringResource(id = R.string.health_and_food), healthAndFoodList
+            stringResource(id = R.string.health_and_food), list.filter { it.category == "health" || it.category == "food" }
         ),
         NewsItem(
-            stringResource(id = R.string.politics), politicsList
+            stringResource(id = R.string.politics), list.filter { it.category == "politics" }
         ),
         NewsItem(
-            stringResource(id = R.string.science), scienceList
+            stringResource(id = R.string.science), list.filter { it.category == "science" }
         ),
         NewsItem(
-            stringResource(id = R.string.sports), sportsList
+            stringResource(id = R.string.sports), list.filter { it.category == "sports" }
         ),
         NewsItem(
-            stringResource(id = R.string.technology), technologyList
+            stringResource(id = R.string.technology), list.filter { it.category == "technology" }
         )
     )
 
@@ -161,7 +153,7 @@ fun NewsViewPager(
                     verticalAlignment = Top
                 ) {
                     NewsListItem(
-                        list = list,
+                        list = tabRowItem[pagerState.currentPage].list,
                         onItemClicked = onItemClicked
                     )
                 }

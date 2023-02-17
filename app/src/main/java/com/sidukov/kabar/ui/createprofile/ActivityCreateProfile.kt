@@ -1,8 +1,6 @@
 package com.sidukov.kabar.ui.createprofile
 
 import android.app.Activity
-import android.app.Application
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -10,10 +8,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.provider.MediaStore
-import android.text.TextUtils
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -22,32 +17,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
-import androidx.core.graphics.drawable.toIcon
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.sidukov.kabar.R
 import com.sidukov.kabar.data.settings.CacheForImage
-import com.sidukov.kabar.data.settings.Profile
 import com.sidukov.kabar.data.settings.Settings
-import com.sidukov.kabar.data.settings.Settings.Companion.CHILD_DIR
-import com.sidukov.kabar.data.settings.Settings.Companion.COMPRESS_QUALITY
 import com.sidukov.kabar.data.settings.Settings.Companion.EMAIL_KEY
-import com.sidukov.kabar.data.settings.Settings.Companion.FILE_EXTENSION
-import com.sidukov.kabar.data.settings.Settings.Companion.TAG
-import com.sidukov.kabar.data.settings.Settings.Companion.TEMP_FILE_NAME
-import com.sidukov.kabar.ui.NewsApplication
+import com.sidukov.kabar.data.settings.Settings.Companion.FILE_NAME
+import com.sidukov.kabar.data.settings.Settings.Companion.PROFILE_FULLNAME
+import com.sidukov.kabar.data.settings.Settings.Companion.PROFILE_PHONENUMBER
 import com.sidukov.kabar.ui.checkEmailLengthAndNull
 import com.sidukov.kabar.ui.checkOnLengthAndNull
-import com.sidukov.kabar.ui.news.FragmentProfile
-import com.squareup.picasso.Cache
-import org.jetbrains.annotations.Nullable
-import org.w3c.dom.Text
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.net.CacheRequest
+import com.sidukov.kabar.ui.news.ActivityGeneral
 
 class ActivityCreateProfile : AppCompatActivity() {
 
@@ -59,10 +40,11 @@ class ActivityCreateProfile : AppCompatActivity() {
 
     private lateinit var imageButtonAddAvatar: ImageButton
     private lateinit var imageAvatar: ImageView
-    var pickedPhoto: Uri? = null
-    var pickedBitmap: Bitmap? = null
+    private var pickedPhoto: Uri? = null
+    private var pickedBitmap: Bitmap? = null
 
     private val auth = Firebase.auth
+    val cache = CacheForImage(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,8 +73,9 @@ class ActivityCreateProfile : AppCompatActivity() {
         email = findViewById(R.id.edit_text_email_address)
         phoneNumber = findViewById(R.id.edit_text_phone_number)
 
-        val a = Intent().getStringExtra(EMAIL_KEY)
-        println("text email = ${a}")
+        email.text = this.intent.getStringExtra(EMAIL_KEY)
+
+        val settings = Settings(this)
 
         buttonNext = findViewById(R.id.button_next)
         buttonNext.setOnClickListener {
@@ -101,17 +84,14 @@ class ActivityCreateProfile : AppCompatActivity() {
                 && checkEmailLengthAndNull(email.text.toString())
                 && checkNumberLengthAndNull(phoneNumber.text.toString())
             ) {
-                val profile = Profile(
-                    username = userName.text.toString(),
-                    avatar = pickedPhoto,
-                    email = email.text.toString(),
-                    phoneNumber = phoneNumber.text.toString(),
-                    fullName = fullName.text.toString()
-                )
+
+                settings.saveProfileUsername = userName.text.toString()
+                settings.saveProfileEmail = email.text.toString()
+                settings.saveProfilePhoneNumber = phoneNumber.text.toString()
+                settings.saveProfileFullname = fullName.text.toString()
+
                 startActivity(
-                    Intent(this, FragmentProfile::class.java).also {
-                        it.putExtra("profile", profile)
-                    }
+                    Intent(this, ActivityGeneral::class.java)
                 )
             } else {
                 Toast.makeText(this, "Please fill necessary fields", Toast.LENGTH_SHORT).show()
@@ -119,7 +99,6 @@ class ActivityCreateProfile : AppCompatActivity() {
         }
 
     }
-
 
     private fun checkNumberLengthAndNull(string: String): Boolean {
         return string.length >= 11 && string.isNotEmpty()
@@ -150,10 +129,12 @@ class ActivityCreateProfile : AppCompatActivity() {
                 if (Build.VERSION.SDK_INT >= 28) {
                     val source = ImageDecoder.createSource(this.contentResolver, pickedPhoto!!)
                     pickedBitmap = ImageDecoder.decodeBitmap(source)
+                    cache.saveImageToCache(pickedBitmap!!, FILE_NAME)
                     imageAvatar.setImageBitmap(pickedBitmap)
                 } else {
                     pickedBitmap =
                         MediaStore.Images.Media.getBitmap(this.contentResolver, pickedPhoto)
+                    cache.saveImageToCache(pickedBitmap!!, FILE_NAME)
                     imageAvatar.setImageBitmap(pickedBitmap)
                 }
             } else imageAvatar.setImageBitmap(bitmapFromCache)
