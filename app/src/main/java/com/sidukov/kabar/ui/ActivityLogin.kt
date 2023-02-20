@@ -12,15 +12,23 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.color.MaterialColors
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.sidukov.kabar.R
 import com.sidukov.kabar.data.settings.Settings.Companion.EMAIL_KEY
+import com.sidukov.kabar.di.injectViewModel
+import com.sidukov.kabar.ui.news.AccountViewModel
 import com.sidukov.kabar.ui.news.ActivityGeneral
 import kotlinx.android.synthetic.main.activity_sign_up.*
+import javax.inject.Inject
 
 class ActivityLogin : AppCompatActivity() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var accountViewModel: AccountViewModel
 
     private lateinit var email: EditText
     private lateinit var password: EditText
@@ -36,6 +44,8 @@ class ActivityLogin : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        NewsApplication.appComponent.inject(this)
+        accountViewModel = injectViewModel(viewModelFactory)
 
         email = findViewById(R.id.edit_input_login)
         password = findViewById(R.id.edit_input_password)

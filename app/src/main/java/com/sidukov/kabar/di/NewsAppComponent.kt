@@ -1,5 +1,8 @@
 package com.sidukov.kabar.di
 
+import com.sidukov.kabar.ui.ActivityLogin
+import com.sidukov.kabar.ui.ActivitySignUp
+import com.sidukov.kabar.ui.createprofile.ActivityCreateProfile
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
 import com.sidukov.kabar.ui.news.ActivityGeneral
 import com.sidukov.kabar.ui.news.FragmentBookmark
@@ -23,6 +26,9 @@ import javax.inject.Singleton
 interface NewsAppComponent {
     fun inject(activityGeneral: ActivityGeneral)
     fun inject(activityArticleNews: ActivityArticleNews)
+    fun inject(activitySignUp: ActivitySignUp)
+    fun inject(activityLogin: ActivityLogin)
+    fun inject(activityCreateProfile: ActivityCreateProfile)
 
     fun inject(fragmentBookmark: FragmentBookmark)
     fun inject(fragmentExplore: FragmentExplore)

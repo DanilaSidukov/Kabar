@@ -256,6 +256,7 @@
         app:layout_constraintBottom_toBottomOf="@id/button_google"
         app:layout_constraintStart_toStartOf="@id/button_google"
         android:textColor="?color_grey_text"
+        android:layout_marginTop="4dp"
         android:layout_marginStart="70.5dp"
         android:layout_marginEnd="44.5dp"
         android:text="@string/google"/>

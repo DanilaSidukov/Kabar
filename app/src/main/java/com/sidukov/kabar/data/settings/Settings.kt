@@ -6,11 +6,14 @@ import androidx.core.content.edit
 import com.squareup.picasso.Cache
 import javax.inject.Inject
 
-class Settings @Inject constructor(context: Context) {
+open class Settings @Inject constructor(context: Context) {
 
     companion object {
         const val SERVICE_ID =
-            "724243461333-eehueikm04mu3kraocadiqansp60kn8t.apps.googleusercontent.com"
+            //"410372047702-lma0ap8putv5vbrl9400sj8jc7oqdcsr.apps.googleusercontent.com"
+        "843635545086-5a5tfcldjk4mplr9e7gorvf65gm9et14.apps.googleusercontent.com"
+
+        const val GOOGLE_AUTH = "Google"
 
         const val API_KEY = "pub_16526c5b9ee62502bac4aaee39680d3370436"
         const val EMAIL_KEY = "email"
@@ -25,6 +28,7 @@ class Settings @Inject constructor(context: Context) {
 
         const val GOOGLE_USERNAME: String = "google_username"
         const val GOOGLE_EMAIL: String = "google_email"
+        const val GOOGLE_IMAGE: String = "google_image"
 
         val TAG: String = Cache::class.java.simpleName
         const val CHILD_DIR = "images"
@@ -34,7 +38,8 @@ class Settings @Inject constructor(context: Context) {
 
     }
 
-    private var sharedPreferences: SharedPreferences = context.getSharedPreferences(PROFILE_KEY, Context.MODE_PRIVATE)
+    private var sharedPreferences: SharedPreferences =
+        context.getSharedPreferences(PROFILE_KEY, Context.MODE_PRIVATE)
 
     var saveProfileUsername: String?
         get() = sharedPreferences.getString(PROFILE_USERNAME, null)
@@ -43,34 +48,40 @@ class Settings @Inject constructor(context: Context) {
         }
 
     var saveProfileFullname: String?
-    get() = sharedPreferences.getString(PROFILE_FULLNAME, null)
-    set(value) = sharedPreferences.edit {
-        putString(PROFILE_FULLNAME, value)
-    }
+        get() = sharedPreferences.getString(PROFILE_FULLNAME, null)
+        set(value) = sharedPreferences.edit {
+            putString(PROFILE_FULLNAME, value)
+        }
 
     var saveProfilePhoneNumber: String?
-    get() = sharedPreferences.getString(PROFILE_PHONENUMBER, null)
-    set(value) = sharedPreferences.edit {
-        putString(PROFILE_PHONENUMBER, value)
-    }
+        get() = sharedPreferences.getString(PROFILE_PHONENUMBER, null)
+        set(value) = sharedPreferences.edit {
+            putString(PROFILE_PHONENUMBER, value)
+        }
 
     var saveProfileEmail: String?
-    get() = sharedPreferences.getString(PROFILE_EMAIL, null)
-    set(value) = sharedPreferences.edit {
-        putString(PROFILE_EMAIL, value)
-    }
+        get() = sharedPreferences.getString(PROFILE_EMAIL, null)
+        set(value) = sharedPreferences.edit {
+            putString(PROFILE_EMAIL, value)
+        }
 
-    var deleteValueProfile =sharedPreferences.edit().clear().apply()
+    var deleteValueProfile = sharedPreferences.edit().clear().apply()
 
     var saveGoogleUsername: String?
-    get() = sharedPreferences.getString(GOOGLE_USERNAME, null)
-    set(value) = sharedPreferences.edit {
-        putString(GOOGLE_USERNAME, value)
-    }
+        get() = sharedPreferences.getString(GOOGLE_USERNAME, null)
+        set(value) = sharedPreferences.edit {
+            putString(GOOGLE_USERNAME, value)
+        }
 
     var saveGoogleEmail: String?
-    get() = sharedPreferences.getString(GOOGLE_EMAIL, null)
-    set(value) = sharedPreferences.edit {
-        putString(GOOGLE_EMAIL, value)
+        get() = sharedPreferences.getString(GOOGLE_EMAIL, null)
+        set(value) = sharedPreferences.edit {
+            putString(GOOGLE_EMAIL, value)
+        }
+
+    var saveGoogleImageUri: String?
+        get() = sharedPreferences.getString(GOOGLE_IMAGE, null)
+    set(value) = sharedPreferences.edit{
+        putString(GOOGLE_IMAGE, value)
     }
 }

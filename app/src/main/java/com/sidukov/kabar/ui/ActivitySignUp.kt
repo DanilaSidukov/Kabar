@@ -2,10 +2,6 @@ package com.sidukov.kabar.ui
 
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.ColorFilter
-import android.graphics.PorterDuff
-import android.opengl.Visibility
-import android.os.Build
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
@@ -15,35 +11,35 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.color.MaterialColors
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.sidukov.kabar.R
-import com.sidukov.kabar.data.settings.Settings
 import com.sidukov.kabar.data.settings.Settings.Companion.EMAIL_KEY
-import com.sidukov.kabar.data.settings.Settings.Companion.GOOGLE_EMAIL
-import com.sidukov.kabar.data.settings.Settings.Companion.GOOGLE_USERNAME
+import com.sidukov.kabar.data.settings.Settings.Companion.GOOGLE_AUTH
 import com.sidukov.kabar.data.settings.Settings.Companion.SERVICE_ID
+import com.sidukov.kabar.di.injectViewModel
 import com.sidukov.kabar.ui.createprofile.ActivityCreateProfile
+import com.sidukov.kabar.ui.news.AccountViewModel
 import com.sidukov.kabar.ui.news.ActivityGeneral
-import okhttp3.internal.platform.Platform
+import javax.inject.Inject
 
-class ActivitySignUp : AppCompatActivity() {
+class ActivitySignUp() : AppCompatActivity() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var accountViewModel: AccountViewModel
 
     private lateinit var email: EditText
     private lateinit var password: EditText
@@ -61,8 +57,6 @@ class ActivitySignUp : AppCompatActivity() {
     lateinit var googleSignInClient: GoogleSignInClient
 
     private val currentUser = auth.currentUser
-
-    val settings = Settings(this)
 
     override fun onStart() {
         super.onStart()
@@ -85,6 +79,8 @@ class ActivitySignUp : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
+        NewsApplication.appComponent.inject(this)
+        accountViewModel = injectViewModel(viewModelFactory)
         
         email = findViewById(R.id.edit_input_login)
         password = findViewById(R.id.edit_input_password)
@@ -139,27 +135,29 @@ class ActivitySignUp : AppCompatActivity() {
             }
         }
 
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(SERVICE_ID)
             .requestEmail()
             .build()
 
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
+        val signInRequest = BeginSignInRequest.builder()
+            .setGoogleIdTokenRequestOptions(
+                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                    .setSupported(true)
+                    .setServerClientId(SERVICE_ID)
+                    .setFilterByAuthorizedAccounts(true)
+                    .build()
+            )
 
 
+        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
+
+        buttonGoogle = findViewById(R.id.button_google)
         buttonGoogle.setOnClickListener {
+            println("A IM HERE")
 
             val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, request_code)
-
-//            BeginSignInRequest.builder()
-//                .setGoogleIdTokenRequestOptions(
-//                    BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-//                        .setSupported(true)
-//                        .setServerClientId(SERVICE_ID)
-//                        .setFilterByAuthorizedAccounts(true)
-//                        .build()
-//                ).build()
         }
 
         textLogin.setOnClickListener {
@@ -172,6 +170,7 @@ class ActivitySignUp : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == request_code){
+            println("in activityresult")
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleResult(task)
         }
@@ -193,11 +192,12 @@ class ActivitySignUp : AppCompatActivity() {
 
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                settings.saveGoogleEmail = account.email.toString()
-                settings.saveGoogleUsername = account.displayName.toString()
+                println("on updateUI")
+                accountViewModel.setGoogleAccount(account.email.toString(), account.displayName.toString(), account.photoUrl!!.toString())
                 startActivity(Intent(this, ActivityGeneral::class.java))
             }
         }.addOnFailureListener {
+            println("error = ${it.localizedMessage}")
             Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
         }
     }

@@ -17,6 +17,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.sidukov.kabar.R
@@ -26,11 +28,19 @@ import com.sidukov.kabar.data.settings.Settings.Companion.EMAIL_KEY
 import com.sidukov.kabar.data.settings.Settings.Companion.FILE_NAME
 import com.sidukov.kabar.data.settings.Settings.Companion.PROFILE_FULLNAME
 import com.sidukov.kabar.data.settings.Settings.Companion.PROFILE_PHONENUMBER
+import com.sidukov.kabar.di.injectViewModel
+import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.checkEmailLengthAndNull
 import com.sidukov.kabar.ui.checkOnLengthAndNull
+import com.sidukov.kabar.ui.news.AccountViewModel
 import com.sidukov.kabar.ui.news.ActivityGeneral
+import javax.inject.Inject
 
 class ActivityCreateProfile : AppCompatActivity() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var accountViewModel: AccountViewModel
 
     private lateinit var buttonNext: Button
     private lateinit var userName: TextView
@@ -49,6 +59,8 @@ class ActivityCreateProfile : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_profile)
+        NewsApplication.appComponent.inject(this)
+        accountViewModel = injectViewModel(viewModelFactory)
 
         imageButtonAddAvatar = findViewById(R.id.button_add_avatar)
         imageAvatar = findViewById(R.id.avatar)
@@ -73,9 +85,11 @@ class ActivityCreateProfile : AppCompatActivity() {
         email = findViewById(R.id.edit_text_email_address)
         phoneNumber = findViewById(R.id.edit_text_phone_number)
 
-        email.text = this.intent.getStringExtra(EMAIL_KEY)
+        lifecycleScope.launchWhenStarted {
+            email.text = accountViewModel.getProfileEmail().toString()
+        }
 
-        val settings = Settings(this)
+        email.text = this.intent.getStringExtra(EMAIL_KEY)
 
         buttonNext = findViewById(R.id.button_next)
         buttonNext.setOnClickListener {
@@ -85,10 +99,12 @@ class ActivityCreateProfile : AppCompatActivity() {
                 && checkNumberLengthAndNull(phoneNumber.text.toString())
             ) {
 
-                settings.saveProfileUsername = userName.text.toString()
-                settings.saveProfileEmail = email.text.toString()
-                settings.saveProfilePhoneNumber = phoneNumber.text.toString()
-                settings.saveProfileFullname = fullName.text.toString()
+                accountViewModel.setProfileAccount(
+                    userName.text.toString(),
+                    email.text.toString(),
+                    phoneNumber.text.toString(),
+                    fullName.text.toString()
+                )
 
                 startActivity(
                     Intent(this, ActivityGeneral::class.java)

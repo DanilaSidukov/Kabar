@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.sidukov.kabar.ui.news.AccountViewModel
 import com.sidukov.kabar.ui.news.NewsViewModel
 import dagger.Binds
 import dagger.Module
@@ -45,4 +46,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(NewsViewModel::class)
     internal abstract fun newsViewModel(newsViewModel: NewsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AccountViewModel::class)
+    internal abstract fun accountViewModel(accountViewModel: AccountViewModel): ViewModel
 }
