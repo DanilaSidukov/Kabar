@@ -20,14 +20,17 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.sidukov.kabar.R
 import com.sidukov.kabar.data.settings.CacheForImage
+import com.sidukov.kabar.data.settings.Profile
 import com.sidukov.kabar.data.settings.Settings
+import com.sidukov.kabar.data.settings.Settings.Companion.DATABASE_USERS_KEY
 import com.sidukov.kabar.data.settings.Settings.Companion.EMAIL_KEY
 import com.sidukov.kabar.data.settings.Settings.Companion.FILE_NAME
-import com.sidukov.kabar.data.settings.Settings.Companion.PROFILE_FULLNAME
-import com.sidukov.kabar.data.settings.Settings.Companion.PROFILE_PHONENUMBER
+import com.sidukov.kabar.data.settings.Settings.Companion.KABAR_PROFILE_KEY
 import com.sidukov.kabar.di.injectViewModel
 import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.checkEmailLengthAndNull
@@ -53,7 +56,9 @@ class ActivityCreateProfile : AppCompatActivity() {
     private var pickedPhoto: Uri? = null
     private var pickedBitmap: Bitmap? = null
 
-    private val auth = Firebase.auth
+    private val currentUser = Firebase.auth.currentUser
+    val database = FirebaseDatabase.getInstance().getReference("/users_data")
+    val newChildRef = database.push()
     val cache = CacheForImage(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,11 +90,7 @@ class ActivityCreateProfile : AppCompatActivity() {
         email = findViewById(R.id.edit_text_email_address)
         phoneNumber = findViewById(R.id.edit_text_phone_number)
 
-        lifecycleScope.launchWhenStarted {
-            email.text = accountViewModel.getProfileEmail().toString()
-        }
-
-        email.text = this.intent.getStringExtra(EMAIL_KEY)
+        email.text = this.intent.getStringExtra(EMAIL_KEY).toString()
 
         buttonNext = findViewById(R.id.button_next)
         buttonNext.setOnClickListener {
@@ -98,13 +99,14 @@ class ActivityCreateProfile : AppCompatActivity() {
                 && checkEmailLengthAndNull(email.text.toString())
                 && checkNumberLengthAndNull(phoneNumber.text.toString())
             ) {
-
-                accountViewModel.setProfileAccount(
+                val user = Profile(
                     userName.text.toString(),
                     email.text.toString(),
                     phoneNumber.text.toString(),
-                    fullName.text.toString()
+                    pickedPhoto
                 )
+
+                database.child(newChildRef.key.toString()).setValue(user)
 
                 startActivity(
                     Intent(this, ActivityGeneral::class.java)

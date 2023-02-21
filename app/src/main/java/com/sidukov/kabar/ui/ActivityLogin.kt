@@ -15,8 +15,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.color.MaterialColors
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.sidukov.kabar.R
+import com.sidukov.kabar.data.settings.Profile
 import com.sidukov.kabar.data.settings.Settings.Companion.EMAIL_KEY
 import com.sidukov.kabar.di.injectViewModel
 import com.sidukov.kabar.ui.news.AccountViewModel
@@ -40,6 +42,7 @@ class ActivityLogin : AppCompatActivity() {
     private lateinit var imageHide: ImageView
 
     private val auth = Firebase.auth
+    val database = Firebase.database.reference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +85,7 @@ class ActivityLogin : AppCompatActivity() {
 
             auth.signInWithEmailAndPassword(emailText, passwordText).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+
                     startActivity(
                         Intent(
                             this, ActivityGeneral::class.java

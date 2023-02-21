@@ -6,14 +6,9 @@ import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -27,7 +22,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.sidukov.kabar.R
 import com.sidukov.kabar.data.settings.Settings.Companion.EMAIL_KEY
-import com.sidukov.kabar.data.settings.Settings.Companion.GOOGLE_AUTH
 import com.sidukov.kabar.data.settings.Settings.Companion.SERVICE_ID
 import com.sidukov.kabar.di.injectViewModel
 import com.sidukov.kabar.ui.createprofile.ActivityCreateProfile
@@ -61,15 +55,9 @@ class ActivitySignUp() : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
-        println("user = $currentUser")
+        println("USER IN ACTIVITY START = $currentUser")
         if (currentUser != null) {
             currentUser.reload()
-            startActivity(
-                Intent(this, ActivityGeneral::class.java)
-            )
-        }
-        val accountGoogle = GoogleSignIn.getLastSignedInAccount(this)
-        if (accountGoogle != null){
             startActivity(
                 Intent(this, ActivityGeneral::class.java)
             )
@@ -140,16 +128,6 @@ class ActivitySignUp() : AppCompatActivity() {
             .requestEmail()
             .build()
 
-        val signInRequest = BeginSignInRequest.builder()
-            .setGoogleIdTokenRequestOptions(
-                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                    .setSupported(true)
-                    .setServerClientId(SERVICE_ID)
-                    .setFilterByAuthorizedAccounts(true)
-                    .build()
-            )
-
-
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
 
         buttonGoogle = findViewById(R.id.button_google)
@@ -193,7 +171,6 @@ class ActivitySignUp() : AppCompatActivity() {
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 println("on updateUI")
-                accountViewModel.setGoogleAccount(account.email.toString(), account.displayName.toString(), account.photoUrl!!.toString())
                 startActivity(Intent(this, ActivityGeneral::class.java))
             }
         }.addOnFailureListener {
