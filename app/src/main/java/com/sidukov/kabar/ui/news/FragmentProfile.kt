@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -15,21 +14,25 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
-import com.google.firebase.database.ktx.getValue
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.sidukov.kabar.R
-import com.sidukov.kabar.data.settings.CacheForImage
 import com.sidukov.kabar.data.settings.Profile
-import com.sidukov.kabar.data.settings.Settings.Companion.DATABASE_USERS_KEY
+import com.sidukov.kabar.data.settings.Settings.Companion.AUTH_GOOGLE
 import com.sidukov.kabar.data.settings.Settings.Companion.FILE_NAME
-import com.sidukov.kabar.data.settings.Settings.Companion.KABAR_PROFILE_KEY
 import com.sidukov.kabar.ui.ActivityLogin
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_profile.*
 
 class FragmentProfile: BaseViewPagerFragment(R.layout.fragment_profile) {
 
@@ -37,17 +40,15 @@ class FragmentProfile: BaseViewPagerFragment(R.layout.fragment_profile) {
     private lateinit var nickName: TextView
     private lateinit var email: TextView
     private lateinit var buttonExit: Button
-
-    private lateinit var databaseReference: DatabaseReference
-
-    lateinit var googleSignInClient: GoogleSignInClient
-    val currentUser = FirebaseAuth.getInstance().currentUser
-
     private lateinit var imageProfile: ImageView
     private lateinit var imageButton: ImageButton
 
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+    private val cloudFirebase = Firebase.firestore
+    private lateinit var storageReference: StorageReference
+
     private var pickedPhoto: Uri? = null
-    private var pickedBitmap: Bitmap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,9 +61,7 @@ class FragmentProfile: BaseViewPagerFragment(R.layout.fragment_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val cache = CacheForImage(this.requireActivity())
-        pickedPhoto = cache.getUriByFileName(FILE_NAME)
-        println("picked Photo = $pickedPhoto")
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), GoogleSignInOptions.DEFAULT_SIGN_IN)
 
         name = view.findViewById(R.id.text_user_name_profile)
         nickName = view.findViewById(R.id.text_user_nickname_profile)
@@ -70,33 +69,50 @@ class FragmentProfile: BaseViewPagerFragment(R.layout.fragment_profile) {
         imageButton = view.findViewById(R.id.button_add_avatar_profile)
         email = view.findViewById(R.id.text_email_profile)
 
-        val account = (requireActivity() as? ActivityGeneral)?.accountViewModel
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("/users_data")
-            databaseReference.addValueEventListener(
-                object : ValueEventListener{
-                    override fun onDataChange(snapshot: DataSnapshot) {
+        val authIntent = requireActivity().intent.getStringExtra("auth").toString()
+        if (authIntent == AUTH_GOOGLE){
+            name.text = currentUser?.displayName.toString()
+            nickName.text = currentUser?.displayName.toString()
+            email.text = currentUser?.email.toString()
+            Picasso.get().load(currentUser?.photoUrl).into(imageProfile)
+            imageButton.visibility = View.GONE
+        } else {
+            imageButton.visibility = View.VISIBLE
 
-                        val snapshotIterator = snapshot.children
-                        val iterator = snapshotIterator.iterator()
+            val emailOfUser = currentUser?.email.toString()
 
-                        iterator.forEach {
-                            val item = it.getValue(Profile::class.java)
-                            if (currentUser?.email.toString() == item?.email){
-                                if (item.imageUri == null) imageProfile.setImageBitmap(pickedBitmap)
-                                else Picasso.get().load(Uri.parse(item.imageUri.toString())).into(imageProfile)
-                                name.text = item.nickName ?: "No name"
-                                nickName.text = item.nickName ?: "No Nickname"
-                                email.text = item.email ?: "No email"
+            cloudFirebase.collection("users")
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    if (querySnapshot.isEmpty){
+                        Toast.makeText(requireContext(), "Error: empty database", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val listProfile: List<Profile> = querySnapshot.toObjects(Profile::class.java)
+                        listProfile.forEach { profile ->
+                            if (profile.email.toString() == emailOfUser) {
+                                name.text = profile.nickName ?: "No name"
+                                nickName.text = profile.nickName ?: "No Nickname"
+                                email.text = profile.email ?: "No email"
+
+                                storageReference = FirebaseStorage.getInstance().reference
+                                storageReference.child("avatars/$emailOfUser").downloadUrl
+                                    .addOnSuccessListener {
+                                        Picasso.get().load(it).into(imageProfile)
+                                    }
+                                    .addOnFailureListener {
+                                        Toast.makeText(requireContext(), "Download error: ${it.localizedMessage}", Toast.LENGTH_SHORT).show()
+                                    }
+
+                                return@addOnSuccessListener
                             }
                         }
                     }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        Toast.makeText(requireContext(), "Something went wrong :(", Toast.LENGTH_SHORT).show()
-                    }
+                }.addOnFailureListener {
+                    Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
                 }
-            )
+
+        }
 
         imageButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -116,7 +132,8 @@ class FragmentProfile: BaseViewPagerFragment(R.layout.fragment_profile) {
                     this.requireActivity(), ActivityLogin::class.java
                 )
             )
-            Firebase.auth.signOut() ?: googleSignInClient.signOut()
+            if (authIntent == AUTH_GOOGLE) googleSignInClient.signOut()
+            else Firebase.auth.signOut()
         }
 
     }
@@ -136,28 +153,35 @@ class FragmentProfile: BaseViewPagerFragment(R.layout.fragment_profile) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    private fun uploadImage(){
+
+        val fileName = currentUser?.email.toString()
+
+        storageReference = FirebaseStorage.getInstance().getReference("avatars/$fileName")
+
+        storageReference.putFile(pickedPhoto!!)
+            .addOnSuccessListener { Toast.makeText(requireContext(),"New avatar added",Toast.LENGTH_SHORT).show() }
+            .addOnFailureListener { Toast.makeText(requireContext(), "Error: ${it.localizedMessage}", Toast.LENGTH_SHORT).show() }
+    }
+
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val cache = CacheForImage(this.requireActivity())
         if (requestCode == 2 && resultCode == Activity.RESULT_OK && data != null) {
             pickedPhoto = data.data
             if (pickedPhoto != null) {
-                if (Build.VERSION.SDK_INT >= 28) {
-                    val source =
-                        ImageDecoder.createSource(requireContext().contentResolver, pickedPhoto!!)
-                    pickedBitmap = ImageDecoder.decodeBitmap(source)
-                    cache.saveImageToCache(pickedBitmap!!, FILE_NAME)
-                    imageProfile.setImageBitmap(pickedBitmap)
-                } else {
-                    pickedBitmap =
-                        MediaStore.Images.Media.getBitmap(requireContext().contentResolver,
-                            pickedPhoto)
-                    cache.saveImageToCache(pickedBitmap!!, FILE_NAME)
-                    imageProfile.setImageBitmap(pickedBitmap)
-                }
+                setImage(pickedPhoto!!)
+                uploadImage()
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    fun setImage(pickedPhoto: Uri){
+        Picasso.get().load(pickedPhoto).into(imageProfile)
+        currentUser?.updateProfile(UserProfileChangeRequest.Builder()
+            .setPhotoUri(pickedPhoto)
+            .build()
+        )
     }
 
 }

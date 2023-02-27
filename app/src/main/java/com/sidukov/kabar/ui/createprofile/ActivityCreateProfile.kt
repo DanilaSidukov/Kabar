@@ -4,46 +4,32 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.sidukov.kabar.R
-import com.sidukov.kabar.data.settings.CacheForImage
 import com.sidukov.kabar.data.settings.Profile
-import com.sidukov.kabar.data.settings.Settings
-import com.sidukov.kabar.data.settings.Settings.Companion.DATABASE_USERS_KEY
 import com.sidukov.kabar.data.settings.Settings.Companion.EMAIL_KEY
 import com.sidukov.kabar.data.settings.Settings.Companion.FILE_NAME
-import com.sidukov.kabar.data.settings.Settings.Companion.KABAR_PROFILE_KEY
-import com.sidukov.kabar.di.injectViewModel
 import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.checkEmailLengthAndNull
 import com.sidukov.kabar.ui.checkOnLengthAndNull
-import com.sidukov.kabar.ui.news.AccountViewModel
 import com.sidukov.kabar.ui.news.ActivityGeneral
-import javax.inject.Inject
+import com.squareup.picasso.Picasso
+import java.io.InputStream
 
 class ActivityCreateProfile : AppCompatActivity() {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    lateinit var accountViewModel: AccountViewModel
 
     private lateinit var buttonNext: Button
     private lateinit var userName: TextView
@@ -54,18 +40,16 @@ class ActivityCreateProfile : AppCompatActivity() {
     private lateinit var imageButtonAddAvatar: ImageButton
     private lateinit var imageAvatar: ImageView
     private var pickedPhoto: Uri? = null
-    private var pickedBitmap: Bitmap? = null
 
+    private val cloudFirebase = Firebase.firestore
     private val currentUser = Firebase.auth.currentUser
     val database = FirebaseDatabase.getInstance().getReference("/users_data")
-    val newChildRef = database.push()
-    val cache = CacheForImage(this)
+    private lateinit var storageReference: StorageReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_profile)
         NewsApplication.appComponent.inject(this)
-        accountViewModel = injectViewModel(viewModelFactory)
 
         imageButtonAddAvatar = findViewById(R.id.button_add_avatar)
         imageAvatar = findViewById(R.id.avatar)
@@ -99,14 +83,23 @@ class ActivityCreateProfile : AppCompatActivity() {
                 && checkEmailLengthAndNull(email.text.toString())
                 && checkNumberLengthAndNull(phoneNumber.text.toString())
             ) {
-                val user = Profile(
-                    userName.text.toString(),
-                    email.text.toString(),
-                    phoneNumber.text.toString(),
-                    pickedPhoto
-                )
 
-                database.child(newChildRef.key.toString()).setValue(user)
+                val user = Profile(
+                        userName.text.toString(),
+                        email.text.toString(),
+                        phoneNumber.text.toString(),
+                    )
+
+                println("picked photo before sending = $pickedPhoto")
+
+                cloudFirebase.collection("users")
+                    .document(currentUser?.email.toString())
+                    .set(user)
+//                    .add(user)
+                    .addOnSuccessListener { Toast.makeText(this, "Successful!", Toast.LENGTH_SHORT).show() }
+                    .addOnFailureListener { Toast.makeText(this, "Error: ${it.localizedMessage}", Toast.LENGTH_SHORT).show() }
+
+//                database.child(newChildRef.key.toString()).setValue(user)
 
                 startActivity(
                     Intent(this, ActivityGeneral::class.java)
@@ -137,27 +130,27 @@ class ActivityCreateProfile : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    private fun uploadImage(){
+
+        val fileName = currentUser?.email.toString()
+
+        storageReference = FirebaseStorage.getInstance().getReference("avatars/$fileName")
+
+        storageReference.putFile(pickedPhoto!!)
+            .addOnSuccessListener { Toast.makeText(this,"Avatar added",Toast.LENGTH_SHORT).show() }
+            .addOnFailureListener { Toast.makeText(this, "Error: ${it.localizedMessage}", Toast.LENGTH_SHORT).show() }
+    }
+
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 2 && resultCode == Activity.RESULT_OK && data != null) {
             pickedPhoto = data.data
-            val cache = CacheForImage(this)
-            val bitmapFromCache = MediaStore.Images.Media.getBitmap(this.contentResolver, cache.getUriByFileName("profile_avatar"))
-            if (pickedPhoto != null && bitmapFromCache == null) {
-                if (Build.VERSION.SDK_INT >= 28) {
-                    val source = ImageDecoder.createSource(this.contentResolver, pickedPhoto!!)
-                    pickedBitmap = ImageDecoder.decodeBitmap(source)
-                    cache.saveImageToCache(pickedBitmap!!, FILE_NAME)
-                    imageAvatar.setImageBitmap(pickedBitmap)
-                } else {
-                    pickedBitmap =
-                        MediaStore.Images.Media.getBitmap(this.contentResolver, pickedPhoto)
-                    cache.saveImageToCache(pickedBitmap!!, FILE_NAME)
-                    imageAvatar.setImageBitmap(pickedBitmap)
-                }
-            } else imageAvatar.setImageBitmap(bitmapFromCache)
+            println("picked photo create profile = $pickedPhoto")
+            if (pickedPhoto != null) {
+                Picasso.get().load(pickedPhoto).into(imageAvatar)
+                uploadImage()
+            }
+            super.onActivityResult(requestCode, resultCode, data)
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
-
 }

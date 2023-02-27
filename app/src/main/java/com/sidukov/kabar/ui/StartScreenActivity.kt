@@ -1,7 +1,7 @@
 package com.sidukov.kabar.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.sidukov.kabar.R
 
 class StartScreenActivity : AppCompatActivity() {

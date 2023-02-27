@@ -1,7 +1,6 @@
 package com.sidukov.kabar.ui.news
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -41,7 +40,6 @@ import com.sidukov.kabar.data.colors.LightColors
 import com.sidukov.kabar.data.database.EntityNews
 import com.sidukov.kabar.ui.news.newscategory.NewsAdapter.Companion.difference
 import kotlinx.coroutines.launch
-import java.io.Serializable
 
 class NewsItem(
     val name: String,

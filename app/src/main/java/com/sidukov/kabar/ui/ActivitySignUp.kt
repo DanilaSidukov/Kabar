@@ -2,13 +2,21 @@ package com.sidukov.kabar.ui
 
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.TextPaint
 import android.text.method.HideReturnsTransformationMethod
+import android.text.method.LinkMovementMethod
 import android.text.method.PasswordTransformationMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -21,19 +29,14 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.sidukov.kabar.R
+import com.sidukov.kabar.data.settings.Settings.Companion.AUTH_GOOGLE
+import com.sidukov.kabar.data.settings.Settings.Companion.AUTH_KABAR
 import com.sidukov.kabar.data.settings.Settings.Companion.EMAIL_KEY
 import com.sidukov.kabar.data.settings.Settings.Companion.SERVICE_ID
-import com.sidukov.kabar.di.injectViewModel
 import com.sidukov.kabar.ui.createprofile.ActivityCreateProfile
-import com.sidukov.kabar.ui.news.AccountViewModel
 import com.sidukov.kabar.ui.news.ActivityGeneral
-import javax.inject.Inject
 
 class ActivitySignUp() : AppCompatActivity() {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    lateinit var accountViewModel: AccountViewModel
 
     private lateinit var email: EditText
     private lateinit var password: EditText
@@ -41,6 +44,7 @@ class ActivitySignUp() : AppCompatActivity() {
     private lateinit var buttonGoogle: Button
 
     private lateinit var textLogin: TextView
+
     private lateinit var imageShow: ImageView
     private lateinit var imageHide: ImageView
 
@@ -68,8 +72,7 @@ class ActivitySignUp() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
         NewsApplication.appComponent.inject(this)
-        accountViewModel = injectViewModel(viewModelFactory)
-        
+
         email = findViewById(R.id.edit_input_login)
         password = findViewById(R.id.edit_input_password)
 
@@ -83,13 +86,11 @@ class ActivitySignUp() : AppCompatActivity() {
             imageShow.visibility = View.VISIBLE
             imageHide.visibility = View.GONE
         }
-        imageShow.setOnClickListener{
+        imageShow.setOnClickListener {
             password.transformationMethod = PasswordTransformationMethod.getInstance()
             imageShow.visibility = View.GONE
             imageHide.visibility = View.VISIBLE
         }
-
-        textLogin = findViewById(R.id.text_login)
 
         buttonLogin = findViewById(R.id.button_login)
         buttonLogin.setOnClickListener {
@@ -110,16 +111,24 @@ class ActivitySignUp() : AppCompatActivity() {
                             )
                         } else {
 
-                            email.backgroundTintList = ColorStateList.valueOf(MaterialColors.getColor(email, R.attr.color_error_red))
-                            password.backgroundTintList = ColorStateList.valueOf(MaterialColors.getColor(email, R.attr.color_error_red))
+                            email.backgroundTintList =
+                                ColorStateList.valueOf(MaterialColors.getColor(email,
+                                    R.attr.color_error_red))
+                            password.backgroundTintList =
+                                ColorStateList.valueOf(MaterialColors.getColor(email,
+                                    R.attr.color_error_red))
                         }
                     }.addOnFailureListener { exception ->
                         Toast.makeText(this, exception.localizedMessage, Toast.LENGTH_SHORT).show()
                     }
             } else {
-                email.backgroundTintList = ColorStateList.valueOf(MaterialColors.getColor(email, R.attr.color_error_red))
-                password.backgroundTintList = ColorStateList.valueOf(MaterialColors.getColor(email, R.attr.color_error_red))
-                Toast.makeText(this, "Please, input appropriate email and password", Toast.LENGTH_SHORT).show()
+                email.backgroundTintList =
+                    ColorStateList.valueOf(MaterialColors.getColor(email, R.attr.color_error_red))
+                password.backgroundTintList =
+                    ColorStateList.valueOf(MaterialColors.getColor(email, R.attr.color_error_red))
+                Toast.makeText(this,
+                    "Please, input appropriate email and password",
+                    Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -132,49 +141,68 @@ class ActivitySignUp() : AppCompatActivity() {
 
         buttonGoogle = findViewById(R.id.button_google)
         buttonGoogle.setOnClickListener {
-            println("A IM HERE")
-
             val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, request_code)
         }
 
-        textLogin.setOnClickListener {
-            startActivity(
-                Intent(this, ActivityLogin::class.java)
-            )
+        textLogin = findViewById(R.id.already_have_an_account)
+        val wordToSpan: Spannable = SpannableString(textLogin.text)
+        val referenceStart = wordToSpan.indexOf("Login")
+        val referenceEnd = referenceStart + 5
+        wordToSpan.setSpan(
+            ForegroundColorSpan(Color.rgb(24, 119,242)),
+            referenceStart, referenceEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        wordToSpan.setSpan(
+            StyleSpan(Typeface.BOLD),
+            referenceStart, referenceEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        val clickableSpan = object: ClickableSpan(){
+            override fun onClick(widget: View) {
+                startActivity(
+                    Intent(this@ActivitySignUp, ActivityLogin::class.java)
+                )
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.isUnderlineText = false
+            }
+
         }
+        wordToSpan.setSpan(clickableSpan, referenceStart, referenceEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        textLogin.text = wordToSpan
+        textLogin.movementMethod = LinkMovementMethod.getInstance()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == request_code){
-            println("in activityresult")
+        if (requestCode == request_code) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleResult(task)
         }
     }
 
-    private fun handleResult(completedTask: Task<GoogleSignInAccount>){
+    private fun handleResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult(ApiException::class.java)
-            if (account != null){
+            if (account != null) {
                 UpdateUI(account)
             }
-        }catch (e: ApiException){
+        } catch (e: ApiException) {
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun UpdateUI(account: GoogleSignInAccount){
+    private fun UpdateUI(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
 
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                println("on updateUI")
-                startActivity(Intent(this, ActivityGeneral::class.java))
+                startActivity(Intent(this, ActivityGeneral::class.java).also {
+                        it.putExtra("auth", AUTH_GOOGLE)
+                    }
+                )
             }
         }.addOnFailureListener {
-            println("error = ${it.localizedMessage}")
             Toast.makeText(this, it.localizedMessage, Toast.LENGTH_SHORT).show()
         }
     }

@@ -15,8 +15,10 @@ import com.sidukov.kabar.data.database.EntityNews
 import com.sidukov.kabar.di.injectViewModel
 import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
-import com.sidukov.kabar.ui.news.newscategory.*
-import kotlinx.coroutines.launch
+import com.sidukov.kabar.ui.news.newscategory.ActivityArticleNews
+import com.sidukov.kabar.ui.news.newscategory.EmptyDividerItemDecoration
+import com.sidukov.kabar.ui.news.newscategory.NewsAdapter
+import com.sidukov.kabar.ui.news.newscategory.OnItemNewsClicked
 import java.io.Serializable
 import javax.inject.Inject
 

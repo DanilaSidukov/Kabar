@@ -2,53 +2,71 @@ package com.sidukov.kabar.ui
 
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.ColorSpace.Rgb
+import android.graphics.Typeface.BOLD
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.TextPaint
 import android.text.method.HideReturnsTransformationMethod
+import android.text.method.LinkMovementMethod
 import android.text.method.PasswordTransformationMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.Typeface
+import androidx.core.text.getSpans
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.android.material.color.MaterialColors
+import com.google.android.material.resources.MaterialResources
+import com.google.android.material.textview.MaterialTextView
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.sidukov.kabar.R
-import com.sidukov.kabar.data.settings.Profile
+import com.sidukov.kabar.data.settings.Settings
+import com.sidukov.kabar.data.settings.Settings.Companion.AUTH_GOOGLE
 import com.sidukov.kabar.data.settings.Settings.Companion.EMAIL_KEY
-import com.sidukov.kabar.di.injectViewModel
-import com.sidukov.kabar.ui.news.AccountViewModel
 import com.sidukov.kabar.ui.news.ActivityGeneral
-import kotlinx.android.synthetic.main.activity_sign_up.*
-import javax.inject.Inject
+import kotlinx.android.synthetic.main.forgot_password_fragment_one.*
+import java.time.format.TextStyle
 
 class ActivityLogin : AppCompatActivity() {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    lateinit var accountViewModel: AccountViewModel
 
     private lateinit var email: EditText
     private lateinit var password: EditText
 
-    private lateinit var buttonLogin: Button
-
     private lateinit var textSignUp: TextView
+
+    private lateinit var buttonLogin: Button
+    private lateinit var buttonGoogle: Button
+    val request_code = 2
+
     private lateinit var imageShow: ImageView
     private lateinit var imageHide: ImageView
 
     private val auth = Firebase.auth
     val database = Firebase.database.reference
+    lateinit var googleSignInClient: GoogleSignInClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         NewsApplication.appComponent.inject(this)
-        accountViewModel = injectViewModel(viewModelFactory)
 
         email = findViewById(R.id.edit_input_login)
         password = findViewById(R.id.edit_input_password)
@@ -69,14 +87,33 @@ class ActivityLogin : AppCompatActivity() {
             imageHide.visibility = View.VISIBLE
         }
 
-        textSignUp = findViewById(R.id.text_sign_up)
-        textSignUp.setOnClickListener {
-            startActivity(
-                Intent(
-                    this, ActivitySignUp::class.java
+
+        textSignUp = findViewById(R.id.text_don_t_have_an_account)
+        val wordToSpan: Spannable = SpannableString(textSignUp.text)
+        val referenceStart = wordToSpan.indexOf("Sign Up")
+        val referenceEnd = referenceStart + 7
+        wordToSpan.setSpan(
+            ForegroundColorSpan(android.graphics.Color.rgb(24, 119,242)),
+            referenceStart, referenceEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        wordToSpan.setSpan(
+            StyleSpan(BOLD),
+            referenceStart, referenceEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        val clickableSpan = object: ClickableSpan(){
+            override fun onClick(widget: View) {
+                startActivity(
+                    Intent(this@ActivityLogin, ActivitySignUp::class.java)
                 )
-            )
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.isUnderlineText = false
+            }
         }
+        wordToSpan.setSpan(clickableSpan, referenceStart, referenceEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE )
+        textSignUp.text = wordToSpan
+        textSignUp.movementMethod = LinkMovementMethod.getInstance()
+
 
         buttonLogin = findViewById(R.id.button_login)
         buttonLogin.setOnClickListener {
@@ -100,6 +137,51 @@ class ActivityLogin : AppCompatActivity() {
             }.addOnFailureListener { exception ->
                 Toast.makeText(this, exception.localizedMessage, Toast.LENGTH_SHORT).show()
             }
+        }
+
+        buttonGoogle = findViewById(R.id.button_google)
+        val googleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(Settings.SERVICE_ID)
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions)
+        buttonGoogle.setOnClickListener {
+            startActivityForResult(googleSignInClient.signInIntent, request_code)
+        }
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == request_code){
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleResult(task)
+        }
+    }
+
+    private fun handleResult(task: Task<GoogleSignInAccount>){
+        try {
+            val account = task.getResult(ApiException::class.java)
+            if (account != null) updateUi(account)
+        } catch (e: ApiException) {
+            Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateUi(account: GoogleSignInAccount){
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+
+        auth.signInWithCredential(credential).addOnCompleteListener { task ->
+            if (task.isSuccessful){
+                startActivity(
+                    Intent(this, ActivityGeneral::class.java).also {
+                        it.putExtra("auth", AUTH_GOOGLE)
+                    }
+                )
+            }
+        }.addOnFailureListener {
+            Toast.makeText(this, "Google login error: ${it.localizedMessage}", Toast.LENGTH_SHORT).show()
         }
     }
 

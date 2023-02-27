@@ -15,8 +15,9 @@ open class Settings @Inject constructor(context: Context) {
             //"410372047702-lma0ap8putv5vbrl9400sj8jc7oqdcsr.apps.googleusercontent.com"
         "843635545086-5a5tfcldjk4mplr9e7gorvf65gm9et14.apps.googleusercontent.com"
 
-        const val DATABASE_USERS_KEY = "users"
-        const val KABAR_PROFILE_KEY = "kabar"
+        const val AUTH_KABAR = "kabar"
+        const val AUTH_GOOGLE = "google"
+
 
         const val API_KEY = "pub_16526c5b9ee62502bac4aaee39680d3370436"
         const val EMAIL_KEY = "email"
@@ -36,5 +37,5 @@ data class Profile(
     val nickName: String? = null,
     val email: String? = null,
     val phoneNumber: String? = null,
-    val imageUri: Uri? = null
+    var imageUri: String? = null,
 )

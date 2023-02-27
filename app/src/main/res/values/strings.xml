@@ -14,12 +14,12 @@
     <string name="or_continue_with">or continue with</string>
     <string name="facebook">Facebook</string>
     <string name="google">Google</string>
-    <string name="don_t_have_an_account">don’t have an account ? </string>
+    <string name="don_t_have_an_account">don’t have an account ? Sign Up</string>
     <string name="sign_up">Sign Up</string>
     <string name="hello_sign_up">Hello!</string>
     <string name="signup_to_get_started">Signup to get Started</string>
     <string name="invalid_username">Invalid Username</string>
-    <string name="already_have_an_account">Already have an account ? </string>
+    <string name="already_have_an_account">Already have an account ? Login</string>
 
 <!-- forgot password activity and fragments -->
     <string name="forgot_password">Forgot Password ?</string>

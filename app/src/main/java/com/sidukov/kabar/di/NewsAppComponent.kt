@@ -3,12 +3,11 @@ package com.sidukov.kabar.di
 import com.sidukov.kabar.ui.ActivityLogin
 import com.sidukov.kabar.ui.ActivitySignUp
 import com.sidukov.kabar.ui.createprofile.ActivityCreateProfile
-import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
 import com.sidukov.kabar.ui.news.ActivityGeneral
 import com.sidukov.kabar.ui.news.FragmentBookmark
 import com.sidukov.kabar.ui.news.FragmentExplore
 import com.sidukov.kabar.ui.news.FragmentHome
-import com.sidukov.kabar.ui.news.newscategory.*
+import com.sidukov.kabar.ui.news.newscategory.ActivityArticleNews
 import dagger.Component
 import javax.inject.Singleton
 

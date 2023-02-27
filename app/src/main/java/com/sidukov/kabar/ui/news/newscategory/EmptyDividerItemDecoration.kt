@@ -3,7 +3,6 @@ package com.sidukov.kabar.ui.news.newscategory
 import android.graphics.Rect
 import android.view.View
 import androidx.core.view.children
-import androidx.core.view.setPadding
 import androidx.recyclerview.widget.RecyclerView
 
 class EmptyDividerItemDecoration(): RecyclerView.ItemDecoration() {

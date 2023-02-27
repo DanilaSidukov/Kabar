@@ -9,10 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.sidukov.kabar.R
 import com.sidukov.kabar.data.database.EntityNews
-import com.sidukov.kabar.domain.NewsItem
 import com.sidukov.kabar.ui.news.newscategory.NewsAdapter.Companion.difference
 import com.squareup.picasso.Picasso
-import org.w3c.dom.Text
 
 class ExploreAdapter(
     private var exploreList: List<EntityNews>

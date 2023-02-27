@@ -1,20 +1,12 @@
 package com.sidukov.kabar.di
 
 import android.content.Context
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonParser
-import com.sidukov.kabar.data.remote.api.ApiClient
-import com.sidukov.kabar.data.settings.Settings
-import com.sidukov.kabar.domain.news_body.NewsBody
 import dagger.Module
 import dagger.Provides
-import okhttp3.*
-import java.io.IOException
+import okhttp3.Cache
+import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
 @Module
 class ApiModule(private val context: Context){
