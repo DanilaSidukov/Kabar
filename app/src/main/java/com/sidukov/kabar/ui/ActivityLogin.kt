@@ -2,8 +2,6 @@ package com.sidukov.kabar.ui
 
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.ColorSpace.Rgb
-import android.graphics.Typeface.BOLD
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -13,17 +11,11 @@ import android.text.method.LinkMovementMethod
 import android.text.method.PasswordTransformationMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
+import android.text.style.TypefaceSpan
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Red
-import androidx.compose.ui.graphics.Color.Companion.Transparent
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.Typeface
-import androidx.core.text.getSpans
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -31,8 +23,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.color.MaterialColors
-import com.google.android.material.resources.MaterialResources
-import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
@@ -43,7 +33,6 @@ import com.sidukov.kabar.data.settings.Settings.Companion.AUTH_GOOGLE
 import com.sidukov.kabar.data.settings.Settings.Companion.EMAIL_KEY
 import com.sidukov.kabar.ui.news.ActivityGeneral
 import kotlinx.android.synthetic.main.forgot_password_fragment_one.*
-import java.time.format.TextStyle
 
 class ActivityLogin : AppCompatActivity() {
 
@@ -95,9 +84,12 @@ class ActivityLogin : AppCompatActivity() {
         wordToSpan.setSpan(
             ForegroundColorSpan(android.graphics.Color.rgb(24, 119,242)),
             referenceStart, referenceEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        wordToSpan.setSpan(
-            StyleSpan(BOLD),
-            referenceStart, referenceEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        ResourcesCompat.getFont(this, R.font.poppins_bold)?.let { fontTypeface ->
+            wordToSpan.setSpan(
+                TypefaceSpan(fontTypeface),
+                referenceStart, referenceEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
         val clickableSpan = object: ClickableSpan(){
             override fun onClick(widget: View) {
                 startActivity(

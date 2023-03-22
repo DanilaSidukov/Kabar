@@ -189,7 +189,8 @@ fun ItemNews(
         null,
         "it's me",
         null,
-        323232121212),
+        323232121212,
+    null),
     onItemClicked: () -> Unit,
 ) {
     Row(

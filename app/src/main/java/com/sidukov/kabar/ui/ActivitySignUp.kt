@@ -14,9 +14,11 @@ import android.text.method.PasswordTransformationMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.text.style.TypefaceSpan
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -150,12 +152,16 @@ class ActivitySignUp() : AppCompatActivity() {
         val referenceStart = wordToSpan.indexOf("Login")
         val referenceEnd = referenceStart + 5
         wordToSpan.setSpan(
-            ForegroundColorSpan(Color.rgb(24, 119,242)),
+            ForegroundColorSpan(Color.rgb(24, 119, 242)),
             referenceStart, referenceEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        wordToSpan.setSpan(
-            StyleSpan(Typeface.BOLD),
-            referenceStart, referenceEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-        val clickableSpan = object: ClickableSpan(){
+        ResourcesCompat.getFont(this, R.font.poppins_bold)?.let { fontTypeface ->
+            wordToSpan.setSpan(
+                TypefaceSpan(fontTypeface),
+                referenceStart, referenceEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+
+        val clickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
                 startActivity(
                     Intent(this@ActivitySignUp, ActivityLogin::class.java)
@@ -168,7 +174,10 @@ class ActivitySignUp() : AppCompatActivity() {
             }
 
         }
-        wordToSpan.setSpan(clickableSpan, referenceStart, referenceEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        wordToSpan.setSpan(clickableSpan,
+            referenceStart,
+            referenceEnd,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         textLogin.text = wordToSpan
         textLogin.movementMethod = LinkMovementMethod.getInstance()
     }
@@ -198,8 +207,8 @@ class ActivitySignUp() : AppCompatActivity() {
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 startActivity(Intent(this, ActivityGeneral::class.java).also {
-                        it.putExtra("auth", AUTH_GOOGLE)
-                    }
+                    it.putExtra("auth", AUTH_GOOGLE)
+                }
                 )
             }
         }.addOnFailureListener {

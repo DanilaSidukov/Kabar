@@ -17,4 +17,5 @@
     <color name="like_color">#ED2E7E</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="error_red">#FFF3F8</color>
+    <color name="dark_color_back">#B0B3B8</color>
 </resources>

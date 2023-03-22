@@ -31,7 +31,8 @@ open class NewsRepository @Inject constructor(
                         description = newsBody.content ?: "No description",
                         authorImage = null,
                         author = newsBody.creator?.first() ?: "No author",
-                        date = newsBody.pubDate?.convertToDate()!!
+                        date = newsBody.pubDate?.convertToDate()!!,
+                        link = newsBody.link
                     )
                 )
             }

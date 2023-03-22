@@ -1,10 +1,18 @@
 package com.sidukov.kabar.ui.news.newscategory
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate.NightMode
+import androidx.cardview.widget.CardView
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
@@ -29,7 +37,8 @@ class ActivityArticleNews() : AppCompatActivity() {
     private lateinit var textCategoryOneNews: TextView
     private lateinit var titleOneNews: TextView
     private lateinit var textDescriptionOneNews: TextView
-
+    private lateinit var shareButton: CardView
+    private lateinit var backButton: androidx.appcompat.widget.Toolbar
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var newsViewModel: NewsViewModel
@@ -55,6 +64,8 @@ class ActivityArticleNews() : AppCompatActivity() {
         textCategoryOneNews = findViewById(R.id.text_category_news_one)
         titleOneNews = findViewById(R.id.text_title_news_one)
         textDescriptionOneNews = findViewById(R.id.text_description_news_one)
+        shareButton = findViewById(R.id.share_button)
+        backButton = findViewById(R.id.one_news_tool_bar)
 
         if (newsItem?.authorImage == null) imageAuthorOneNews.setImageResource(R.drawable.ic_pencil_news)
         else Picasso.get().load(newsItem.authorImage).into(imageAuthorOneNews)
@@ -65,6 +76,7 @@ class ActivityArticleNews() : AppCompatActivity() {
         textCategoryOneNews.text = newsItem?.category
         titleOneNews.text = newsItem?.title
         textDescriptionOneNews.text = newsItem?.description
+        val linkNews = newsItem?.link
 
         lifecycleScope.launchWhenStarted {
             newsViewModel.bookmarkData.collect { list ->
@@ -79,52 +91,63 @@ class ActivityArticleNews() : AppCompatActivity() {
             }
         }
 
-        var booleanLike = false
         likeButton.setOnClickListener {
             if (!newsItem?.likeBoolean!!) {
                 likeButton.setMinProgress(0f)
                 likeButton.setMaxProgress(0.5f)
-                likeButton.speed = 0.5f
-                likeButton.playAnimation()
                 newsItem.likeBoolean = true
-                booleanLike = true
-                println("like set")
-                newsViewModel.updateBookmarkData(newsItem)
             } else {
                 likeButton.setMinProgress(0.5f)
                 likeButton.setMaxProgress(1f)
-                likeButton.speed = 0.5f
-                likeButton.playAnimation()
                 newsItem.likeBoolean = false
-                booleanLike = false
-                println("like unset")
-                newsViewModel.updateBookmarkData(newsItem)
             }
+            likeButton.speed = 0.5f
+            likeButton.playAnimation()
+            newsViewModel.updateBookmarkData(newsItem)
         }
 
-
-        var booleanBookmark = false
         bookmarkButton.setOnClickListener {
             if (!newsItem?.bookmarkBoolean!!) {
                 bookmarkButton.setMaxProgress(0.5f)
                 bookmarkButton.setMinProgress(0f)
                 bookmarkButton.speed = -0.5f
                 bookmarkButton.playAnimation()
-                booleanBookmark = true
                 newsItem.bookmarkBoolean = true
-                println("bookmark set")
                 newsViewModel.addBookmarkData(newsItem)
             } else {
                 bookmarkButton.setMinProgress(0f)
                 bookmarkButton.setMaxProgress(0.5f)
                 bookmarkButton.speed = 0.5f
                 bookmarkButton.playAnimation()
-                booleanBookmark = true
                 newsItem.bookmarkBoolean = false
-                println("bookmark unset")
                 newsViewModel.deleteBookmarkData(newsItem)
             }
         }
+
+        shareButton.setOnClickListener {
+            val sharingIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                type = "text/plain"
+                val sharedString = if (!linkNews?.isNullOrEmpty()!!) linkNews
+                else textDescriptionOneNews.text.toString()
+                putExtra(Intent.EXTRA_TEXT, "I share the news:\n$sharedString")
+            }
+            startActivity(Intent.createChooser(sharingIntent, "Share via" ))
+        }
+
+        setSupportActionBar(backButton)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
+
+        if (this.resources.configuration.uiMode == Configuration.UI_MODE_NIGHT_YES) backButton.navigationIcon?.setColorFilter(getColor(R.color.dark_color_back), PorterDuff.Mode.SRC_ATOP)
+        else backButton.navigationIcon?.setColorFilter(getColor(R.color.anthracite), PorterDuff.Mode.SRC_ATOP)
+
+        backButton.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
     }
 
 }

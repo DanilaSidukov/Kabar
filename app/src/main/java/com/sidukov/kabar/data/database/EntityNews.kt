@@ -14,6 +14,7 @@ data class EntityNews(
     @ColumnInfo val author: String,
     @ColumnInfo val authorImage: String?,
     @ColumnInfo val date: Long?,
+    @ColumnInfo var link: String?,
     @ColumnInfo var likeBoolean: Boolean = false,
-    @ColumnInfo var bookmarkBoolean: Boolean = false
+    @ColumnInfo var bookmarkBoolean: Boolean = false,
     ): Serializable
