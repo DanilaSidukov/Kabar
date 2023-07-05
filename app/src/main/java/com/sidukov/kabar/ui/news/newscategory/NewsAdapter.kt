@@ -18,7 +18,10 @@ class NewsAdapter(
     private val listener: OnItemNewsClicked,
 ) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
+    lateinit var picasso: Picasso
+
     companion object {
+
         fun Long?.difference(): String? {
             if (this == null) return null
 
@@ -28,7 +31,7 @@ class NewsAdapter(
             val difference = now.time - newsDate.time
 
             val seconds = (difference / 1000).toInt()
-            val minutes =(seconds / 60)
+            val minutes = (seconds / 60)
             val hours = (minutes / 60)
             val days = (hours / 24)
 
@@ -40,6 +43,10 @@ class NewsAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
+
+        picasso = Picasso.Builder(parent.context)
+            .build()
+
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_news, parent, false)
         return NewsViewHolder(view)
     }
@@ -50,9 +57,12 @@ class NewsAdapter(
             listener.onItemNewsClicked(newsList[position])
         }
 
-        if (newsList[position].newsImage != null || !newsList[position].newsImage.isNullOrBlank()) Picasso.get().load(newsList[position].newsImage)
-            .into(holder.newsImage)
-        else holder.newsImage.setImageResource(R.drawable.ic_news)
+        if (newsList[position].newsImage == (R.drawable.ic_news).toString()) newsList[position].newsImage?.let {
+            Picasso.get().load(
+                it.toInt()).into(holder.newsImage)
+        }
+        else Picasso.get().load(newsList[position].newsImage).into(holder.newsImage)
+
         holder.category.text = newsList[position].category
         holder.title.text = newsList[position].title
         holder.authorImage.setImageResource(R.drawable.ic_pencil_news)
@@ -79,7 +89,7 @@ class NewsAdapter(
 
 }
 
-suspend fun <T> Flow<List<T>>.flattenToList() = flatMapConcat { it.asFlow()}.toList()
+suspend fun <T> Flow<List<T>>.flattenToList() = flatMapConcat { it.asFlow() }.toList()
 
 interface OnItemNewsClicked {
     fun onItemNewsClicked(itemNews: EntityNews)

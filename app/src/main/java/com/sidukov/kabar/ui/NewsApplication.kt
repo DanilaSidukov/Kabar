@@ -1,7 +1,11 @@
 package com.sidukov.kabar.ui
 
 import android.app.Application
-import com.sidukov.kabar.di.*
+import com.sidukov.kabar.di.AppModule
+import com.sidukov.kabar.di.DaggerNewsAppComponent
+import com.sidukov.kabar.di.NewsAppComponent
+import com.sidukov.kabar.di.RepositoryModule
+import com.sidukov.kabar.di.StorageModule
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import javax.inject.Inject

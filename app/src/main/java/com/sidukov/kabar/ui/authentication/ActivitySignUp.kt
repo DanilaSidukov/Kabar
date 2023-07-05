@@ -1,9 +1,8 @@
-package com.sidukov.kabar.ui
+package com.sidukov.kabar.ui.authentication
 
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -13,10 +12,13 @@ import android.text.method.LinkMovementMethod
 import android.text.method.PasswordTransformationMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
-import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -32,9 +34,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.sidukov.kabar.R
 import com.sidukov.kabar.data.settings.Settings.Companion.AUTH_GOOGLE
-import com.sidukov.kabar.data.settings.Settings.Companion.AUTH_KABAR
 import com.sidukov.kabar.data.settings.Settings.Companion.EMAIL_KEY
 import com.sidukov.kabar.data.settings.Settings.Companion.SERVICE_ID
+import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.createprofile.ActivityCreateProfile
 import com.sidukov.kabar.ui.news.ActivityGeneral
 

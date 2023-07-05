@@ -1,7 +1,7 @@
 package com.sidukov.kabar.domain
 
 import java.io.Serializable
-import java.util.*
+import java.util.Date
 
 data class NewsItem(
     val newsImage: String?,

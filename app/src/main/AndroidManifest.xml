@@ -18,7 +18,7 @@
         android:theme="@style/Theme.Kabar"
         tools:targetApi="31">
         <activity
-            android:name=".ui.ActivitySignUp"
+            android:name=".ui.authentication.ActivitySignUp"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +34,7 @@
         <activity android:name=".ui.news.newscategory.ActivityArticleNews">
         </activity>
 
-        <activity android:name=".ui.ActivityLogin">
+        <activity android:name=".ui.authentication.ActivityLogin">
         </activity>
 
         <activity android:name=".ui.news.ActivityGeneral">

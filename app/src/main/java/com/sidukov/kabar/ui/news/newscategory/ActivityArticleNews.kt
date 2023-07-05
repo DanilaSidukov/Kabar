@@ -3,16 +3,12 @@ package com.sidukov.kabar.ui.news.newscategory
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.ColorFilter
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate.NightMode
 import androidx.cardview.widget.CardView
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.lottie.LottieAnimationView
@@ -39,6 +35,7 @@ class ActivityArticleNews() : AppCompatActivity() {
     private lateinit var textDescriptionOneNews: TextView
     private lateinit var shareButton: CardView
     private lateinit var backButton: androidx.appcompat.widget.Toolbar
+
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var newsViewModel: NewsViewModel
@@ -132,7 +129,7 @@ class ActivityArticleNews() : AppCompatActivity() {
                 else textDescriptionOneNews.text.toString()
                 putExtra(Intent.EXTRA_TEXT, "I share the news:\n$sharedString")
             }
-            startActivity(Intent.createChooser(sharingIntent, "Share via" ))
+            startActivity(Intent.createChooser(sharingIntent, "Share via"))
         }
 
         setSupportActionBar(backButton)
@@ -141,8 +138,14 @@ class ActivityArticleNews() : AppCompatActivity() {
             setDisplayShowHomeEnabled(true)
         }
 
-        if (this.resources.configuration.uiMode == Configuration.UI_MODE_NIGHT_YES) backButton.navigationIcon?.setColorFilter(getColor(R.color.dark_color_back), PorterDuff.Mode.SRC_ATOP)
-        else backButton.navigationIcon?.setColorFilter(getColor(R.color.anthracite), PorterDuff.Mode.SRC_ATOP)
+        if (this.resources.configuration.uiMode == Configuration.UI_MODE_NIGHT_YES) backButton.navigationIcon?.setColorFilter(
+            getColor(R.color.dark_color_back),
+            PorterDuff.Mode.SRC_ATOP
+        )
+        else backButton.navigationIcon?.setColorFilter(
+            getColor(R.color.anthracite),
+            PorterDuff.Mode.SRC_ATOP
+        )
 
         backButton.setNavigationOnClickListener {
             onBackPressed()

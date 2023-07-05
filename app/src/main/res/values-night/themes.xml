@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Kabar" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Kabar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_200</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -12,5 +12,26 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="color_blue_1">@color/blue</item>
+        <item name="color_black">@color/title_white</item>
+        <item name="color_anthracite">@color/dark_color_back</item>
+        <item name="color_white">@color/black_background</item>
+        <item name="color_blue_2">@color/blue_2</item>
+        <item name="color_grey_background">@color/grey_background</item>
+        <item name="color_grey_text">@color/grey_text</item>
+        <item name="color_red">@color/red</item>
+        <item name="color_black_2">@color/white</item>
+<!--        <item name="color_like">@color/like_color</item>-->
+        <item name="color_error_red">@color/error_red</item>
+        <item name="color_show_password">@color/dark_color_back</item>
+        <item name="color_back">@color/dark_color_back</item>
+<!--        <item name="color_title">@color/title_white</item>-->
+        <item name="color_bookmark_edit_background">@color/dark_background</item>
+        <item name="color_hint">@color/white</item>
+        <item name="color_button_text">@color/white</item>
+        <item name="color_const_black">@color/black</item>
+        <item name="color_const_white">@color/white</item>
     </style>
 </resources>

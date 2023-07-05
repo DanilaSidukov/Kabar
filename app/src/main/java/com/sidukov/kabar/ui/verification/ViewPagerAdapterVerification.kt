@@ -11,9 +11,6 @@ class ViewPagerAdapterVerification(
     container: FragmentActivity,
 ) : FragmentStateAdapter(container), FragmentReplacer {
 
-//@Inject
-//lateinit varviewModelFactory: ViewModelFactory
-
     companion object {
         private var PAGE_COUNTER = 3
     }

@@ -1,4 +1,4 @@
-package com.sidukov.kabar.ui.news.newscategory
+package com.sidukov.kabar.ui.common
 
 import android.graphics.Rect
 import android.view.View

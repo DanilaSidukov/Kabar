@@ -1,7 +1,8 @@
-package com.sidukov.kabar.ui
+package com.sidukov.kabar.ui.authentication
 
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.os.Build
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
@@ -14,6 +15,7 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.TypefaceSpan
 import android.view.View
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -31,6 +33,7 @@ import com.sidukov.kabar.R
 import com.sidukov.kabar.data.settings.Settings
 import com.sidukov.kabar.data.settings.Settings.Companion.AUTH_GOOGLE
 import com.sidukov.kabar.data.settings.Settings.Companion.EMAIL_KEY
+import com.sidukov.kabar.ui.NewsApplication
 import com.sidukov.kabar.ui.news.ActivityGeneral
 import kotlinx.android.synthetic.main.forgot_password_fragment_one.*
 
@@ -52,6 +55,7 @@ class ActivityLogin : AppCompatActivity() {
     val database = Firebase.database.reference
     lateinit var googleSignInClient: GoogleSignInClient
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)

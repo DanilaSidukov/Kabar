@@ -68,6 +68,7 @@
         android:background="@drawable/edit_text_rounded"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
+        android:textColor="?color_black_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/text_username"
         app:layout_constraintTop_toBottomOf="@id/text_username" />
@@ -122,6 +123,7 @@
         android:background="@drawable/edit_text_rounded"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
+        android:textColor="?color_black_2"
         app:layout_constraintStart_toStartOf="@id/text_password"
         app:layout_constraintTop_toBottomOf="@id/text_password" />
 
@@ -189,6 +191,7 @@
         android:layout_marginTop="48dp"
         android:fontFamily="@font/poppins_semibold"
         android:text="@string/login"
+        android:textColor="?color_button_text"
         android:textAppearance="@style/TextAppearance.Login_bold_style_anthracite"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -279,12 +282,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="74dp"
         android:layout_marginTop="16dp"
+        android:autoLink="none"
         android:text="@string/don_t_have_an_account"
-        app:layout_constraintStart_toStartOf="@id/button_facebook"
-        app:layout_constraintTop_toBottomOf="@id/button_facebook"
         android:textColorHighlight="@color/transparent"
         android:textColorLink="?attr/color_blue_1"
-        android:autoLink="none"/>
+        app:layout_constraintStart_toStartOf="@id/button_facebook"
+        app:layout_constraintTop_toBottomOf="@id/button_facebook" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

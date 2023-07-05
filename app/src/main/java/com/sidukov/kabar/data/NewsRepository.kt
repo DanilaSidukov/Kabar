@@ -1,10 +1,11 @@
 package com.sidukov.kabar.data
 
+import com.sidukov.kabar.R
 import com.sidukov.kabar.data.database.EntityNews
 import com.sidukov.kabar.data.database.NewsBookmarkDao
 import com.sidukov.kabar.data.remote.api.ApiClient
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 open class NewsRepository @Inject constructor(
@@ -25,7 +26,8 @@ open class NewsRepository @Inject constructor(
             requestNews.results.forEach { newsBody ->
                 this.add(
                     EntityNews(
-                        newsImage = newsBody.image_url,
+                        newsImage = if (newsBody.image_url.isNullOrBlank()) (R.drawable.ic_news).toString()
+                        else newsBody.image_url,
                         category = newsBody.category?.first() ?: "No category",
                         title = newsBody.description ?: "No title",
                         description = newsBody.content ?: "No description",

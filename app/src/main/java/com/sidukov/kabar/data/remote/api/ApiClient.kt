@@ -5,7 +5,13 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import com.sidukov.kabar.data.settings.Settings.Companion.API_KEY
 import com.sidukov.kabar.domain.news_body.NewsBody
-import okhttp3.*
+import okhttp3.Cache
+import okhttp3.CacheControl
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject

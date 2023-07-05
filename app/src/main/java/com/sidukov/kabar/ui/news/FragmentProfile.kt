@@ -3,9 +3,7 @@ package com.sidukov.kabar.ui.news
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -26,10 +24,9 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.sidukov.kabar.R
-import com.sidukov.kabar.data.settings.Profile
+import com.sidukov.kabar.data.local.Profile
 import com.sidukov.kabar.data.settings.Settings.Companion.AUTH_GOOGLE
-import com.sidukov.kabar.data.settings.Settings.Companion.FILE_NAME
-import com.sidukov.kabar.ui.ActivityLogin
+import com.sidukov.kabar.ui.authentication.ActivityLogin
 import com.sidukov.kabar.ui.forgotpassword.fragmentpager.BaseViewPagerFragment
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_profile.*

@@ -3,9 +3,7 @@ package com.sidukov.kabar.ui.createprofile
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.*
@@ -19,15 +17,13 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.sidukov.kabar.R
-import com.sidukov.kabar.data.settings.Profile
+import com.sidukov.kabar.data.local.Profile
 import com.sidukov.kabar.data.settings.Settings.Companion.EMAIL_KEY
-import com.sidukov.kabar.data.settings.Settings.Companion.FILE_NAME
 import com.sidukov.kabar.ui.NewsApplication
-import com.sidukov.kabar.ui.checkEmailLengthAndNull
-import com.sidukov.kabar.ui.checkOnLengthAndNull
+import com.sidukov.kabar.ui.authentication.checkEmailLengthAndNull
+import com.sidukov.kabar.ui.authentication.checkOnLengthAndNull
 import com.sidukov.kabar.ui.news.ActivityGeneral
 import com.squareup.picasso.Picasso
-import java.io.InputStream
 
 class ActivityCreateProfile : AppCompatActivity() {
 
@@ -95,11 +91,8 @@ class ActivityCreateProfile : AppCompatActivity() {
                 cloudFirebase.collection("users")
                     .document(currentUser?.email.toString())
                     .set(user)
-//                    .add(user)
                     .addOnSuccessListener { Toast.makeText(this, "Successful!", Toast.LENGTH_SHORT).show() }
                     .addOnFailureListener { Toast.makeText(this, "Error: ${it.localizedMessage}", Toast.LENGTH_SHORT).show() }
-
-//                database.child(newChildRef.key.toString()).setValue(user)
 
                 startActivity(
                     Intent(this, ActivityGeneral::class.java)

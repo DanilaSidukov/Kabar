@@ -1,6 +1,7 @@
 <resources>
 
 <!-- login and sign up activity strings -->
+    <string name="email">Email</string>
     <string name="app_name">Kabar</string>
     <string name="hello_login">Hello</string>
     <string name="again">Again!</string>
@@ -26,7 +27,7 @@
     <string name="submit">Submit</string>
     <string name="don_t_worry_it_happens">Don’t worry! it happens. Please select the email or number associated with your account.</string>
     <string name="via_email">via Email:</string>
-    <string name="email">example@youremail.com</string>
+    <string name="email_example">example@youremail.com</string>
     <string name="via_sms">via SMS:</string>
     <string name="number">+62-8421-4512-2531</string>
     <string name="don_t_worry_it_happens_address">Don’t worry! it happens. Please enter the address associated with your account.</string>

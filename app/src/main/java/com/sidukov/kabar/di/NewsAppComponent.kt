@@ -1,7 +1,7 @@
 package com.sidukov.kabar.di
 
-import com.sidukov.kabar.ui.ActivityLogin
-import com.sidukov.kabar.ui.ActivitySignUp
+import com.sidukov.kabar.ui.authentication.ActivityLogin
+import com.sidukov.kabar.ui.authentication.ActivitySignUp
 import com.sidukov.kabar.ui.createprofile.ActivityCreateProfile
 import com.sidukov.kabar.ui.news.ActivityGeneral
 import com.sidukov.kabar.ui.news.FragmentBookmark

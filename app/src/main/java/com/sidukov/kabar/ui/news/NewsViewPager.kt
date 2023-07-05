@@ -7,18 +7,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.ripple.LocalRippleTheme
-import androidx.compose.material.ripple.RippleAlpha
-import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.Top
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -33,11 +28,9 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.sidukov.kabar.R
-import com.sidukov.kabar.data.colors.KabarColors
-import com.sidukov.kabar.data.colors.LightColors
 import com.sidukov.kabar.data.database.EntityNews
+import com.sidukov.kabar.data.theme.KabarTheme
 import com.sidukov.kabar.ui.news.newscategory.NewsAdapter.Companion.difference
 import kotlinx.coroutines.launch
 
@@ -93,18 +86,18 @@ fun NewsViewPager(
         Column(
             modifier = Modifier
                 .fillMaxHeight()
-                .background(colorResource(id = R.color.white))
+                .background(KabarTheme.colors.white)
         ) {
             ScrollableTabRow(
                 modifier = Modifier
-                    .background(colorResource(id = R.color.white)),
+                    .background(KabarTheme.colors.white),
                 selectedTabIndex = pagerState.currentPage,
                 divider = { Divider() },
                 edgePadding = 0.dp,
                 indicator = { tabPositions ->
                     TabRowDefaults.Indicator(
                         Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
-                        color = colorResource(id = R.color.blue),
+                        color = KabarTheme.colors.blue,
                     )
                 },
             ) {
@@ -113,8 +106,8 @@ fun NewsViewPager(
                     Tab(
                         selected = pagerState.currentPage == index,
                         modifier = Modifier
-                            .background(colorResource(id = R.color.white))
-                            .border(0.dp, color = colorResource(id = R.color.white))
+                            .background(KabarTheme.colors.white)
+                            .border(0.dp, color = KabarTheme.colors.white)
                             .height(35.dp),
                         onClick = {
                             coroutineScope.launch {
@@ -133,9 +126,9 @@ fun NewsViewPager(
                                 fontWeight = FontWeight.W400,
                                 textAlign = TextAlign.Center,
                                 color = if (isSelected) {
-                                    colorResource(id = R.color.black_2)
+                                    KabarTheme.colors.black_2
                                 } else {
-                                    colorResource(id = R.color.anthracite)
+                                    KabarTheme.colors.anthracite
                                 }
                             )
                         }
@@ -147,7 +140,8 @@ fun NewsViewPager(
                 HorizontalPager(
                     count = tabRowItem.size,
                     state = pagerState,
-                    modifier = Modifier.fillMaxHeight(),
+                    modifier = Modifier.fillMaxHeight()
+                        .background(KabarTheme.colors.white),
                     verticalAlignment = Top
                 ) {
                     NewsListItem(
@@ -181,16 +175,10 @@ fun NewsListItem(list: List<EntityNews>, onItemClicked: (EntityNews) -> Unit) {
     }
 }
 
+@SuppressLint("ResourceType")
 @Composable
 fun ItemNews(
-    item: EntityNews = EntityNews("news",
-        "all",
-        "something",
-        null,
-        "it's me",
-        null,
-        323232121212,
-    null),
+    item: EntityNews,
     onItemClicked: () -> Unit,
 ) {
     Row(
@@ -217,14 +205,14 @@ fun ItemNews(
             Text(text = item.category!!,
                 fontSize = 14.sp,
                 fontStyle = FontStyle(R.font.poppins_regular),
-                color = colorResource(id = R.color.anthracite),
+                color = KabarTheme.colors.anthracite,
                 fontWeight = FontWeight.Normal,
                 maxLines = 1
             )
             Text(text = item.title,
                 fontSize = 16.sp,
                 fontStyle = FontStyle(R.font.poppins_regular),
-                color = colorResource(id = R.color.black_2),
+                color = KabarTheme.colors.black_2,
                 maxLines = 2
             )
             Row(
@@ -250,7 +238,7 @@ fun ItemNews(
                     Text(text = item.author,
                         fontSize = 13.sp,
                         fontStyle = FontStyle(R.font.poppins_semibold),
-                        color = colorResource(id = R.color.anthracite),
+                        color = KabarTheme.colors.anthracite,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1
                     )
@@ -269,7 +257,7 @@ fun ItemNews(
                     Text(text = item.date.difference()!!,
                         fontSize = 13.sp,
                         fontStyle = FontStyle(R.font.poppins_semibold),
-                        color = colorResource(id = R.color.anthracite),
+                        color = KabarTheme.colors.anthracite,
                         fontWeight = FontWeight.Normal,
                         maxLines = 1)
                 }
@@ -278,6 +266,7 @@ fun ItemNews(
     }
 }
 
+@SuppressLint("ResourceType")
 @Preview
 @Composable
 fun LoadingCircleBar() {
@@ -288,58 +277,15 @@ fun LoadingCircleBar() {
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.71f)
-            .background(colorResource(id = R.color.white)),
+            .background(KabarTheme.colors.white),
 
         ) {
         Spacer(modifier = Modifier.height(30.dp))
         CircularProgressIndicator(
-            color = colorResource(id = R.color.blue),
+            color = KabarTheme.colors.blue,
             modifier = Modifier.size(50.dp)
         )
     }
 }
 
-object KabarTheme {
-    val colors: KabarColors
-        @Composable
-        @ReadOnlyComposable
-        get() = LocalColors.current
 
-}
-
-internal val LocalColors = staticCompositionLocalOf { LightColors }
-
-object RippleEffect : RippleTheme {
-    @Composable
-    override fun defaultColor() = KabarTheme.colors.rippleColor
-
-    @Composable
-    override fun rippleAlpha(): RippleAlpha = RippleTheme.defaultRippleAlpha(
-        KabarTheme.colors.rippleColor,
-        lightTheme = !isSystemInDarkTheme(),
-    )
-}
-
-@Composable
-fun KabarTheme(
-    darkTheme: Boolean,
-    content: @Composable () -> Unit,
-) {
-    val colors = LightColors
-    //(if (darkTheme) DarkColors else LightColors)
-
-    val systemUiController = rememberSystemUiController()
-    SideEffect {
-        systemUiController.setSystemBarsColor(Transparent)
-    }
-
-    androidx.compose.material3.MaterialTheme(
-        colorScheme = colors.material
-    ) {
-        CompositionLocalProvider(
-            LocalColors provides colors,
-            LocalRippleTheme provides RippleEffect,
-            content = content,
-        )
-    }
-}

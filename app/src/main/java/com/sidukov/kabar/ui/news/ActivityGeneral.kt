@@ -18,6 +18,8 @@ class ActivityGeneral : AppCompatActivity(), OpenAllNewsFragment {
         setContentView(R.layout.activity_general_layout)
         NewsApplication.appComponent.inject(this)
 
+        supportActionBar?.hide()
+
         viewPagerGeneral = findViewById(R.id.view_pager2_general)
         viewPagerGeneral.adapter = ViewPagerGeneralAdapter(this)
         viewPagerGeneral.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER

@@ -47,6 +47,7 @@
         android:layout_marginBottom="40dp"
         android:textAppearance="@style/TextAppearance.Login_bold_style_anthracite"
         android:fontFamily="@font/poppins_semibold"
+        android:textColor="?color_button_text"
         android:textSize="16sp"
         android:text="@string/go_to_homepage" />
 

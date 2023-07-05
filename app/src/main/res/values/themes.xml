@@ -23,7 +23,15 @@
         <item name="color_grey_text">@color/grey_text</item>
         <item name="color_red">@color/red</item>
         <item name="color_black_2">@color/black_2</item>
-        <item name="color_like">@color/like_color</item>
+<!--        <item name="color_like">@color/like_color</item>-->
         <item name="color_error_red">@color/error_red</item>
+        <item name="color_show_password">@color/anthracite</item>
+        <item name="color_back">@color/title_white</item>
+<!--        <item name="color_title">@color/black</item>-->
+        <item name="color_bookmark_edit_background">@color/white</item>
+        <item name="color_hint">@color/hint_anthracite</item>
+        <item name="color_button_text">@color/white</item>
+        <item name="color_const_black">@color/black</item>
+        <item name="color_const_white">@color/white</item>
     </style>
 </resources>

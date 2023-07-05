@@ -18,4 +18,8 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="error_red">#FFF3F8</color>
     <color name="dark_color_back">#B0B3B8</color>
+    <color name="dark_background">#3A3B3C</color>
+    <color name="black_background">#1C1E21</color>
+    <color name="title_white">#E4E6EB</color>
+    <color name="hint_anthracite">#A0A3BD</color>
 </resources>
